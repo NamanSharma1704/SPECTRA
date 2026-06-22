@@ -4,13 +4,8 @@ import { db } from "@/server/db";
 import { IntelligenceService } from "@/server/services/IntelligenceService";
 
 export class ServerSDK {
-  static async getItems() {
-    const { data } = await db.from("items").select("*");
-    return data;
-  }
-
   static async getBuilds() {
-    const builds = await BuildRepository.getAllBuildsWithScores();
+    const builds = await BuildRepository.getAllBuilds();
     return { data: builds };
   }
 
@@ -52,8 +47,25 @@ export class ServerSDK {
   }
 
   static async getActivityBuilds(activityId: string) {
-    const builds = await BuildRepository.getBuildsByActivity(activityId);
-    return { data: builds };
+    const { data } = await db
+      .from("build_activity_scores")
+      .select(`
+        meta_score,
+        threat_level,
+        confidence_score,
+        popularity_index,
+        success_rate,
+        builds (
+          id,
+          name,
+          archetype,
+          creators (name)
+        )
+      `)
+      .eq("activity_id", activityId)
+      .order("meta_score", { ascending: false });
+
+    return { data };
   }
 
   static async getIntel() {

@@ -11,7 +11,8 @@ export default async function ActivityPage({ params }: { params: Promise<{ slug:
   const readableName = slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 
   const activitiesRes = await ServerSDK.getActivities();
-  const activity = activitiesRes.data.find((a: any) => a.name.toLowerCase() === readableName.toLowerCase());
+  const activities = activitiesRes.data ?? [];
+  const activity = activities.find((a: any) => a.name.toLowerCase() === readableName.toLowerCase());
 
   if (!activity) {
     notFound();
