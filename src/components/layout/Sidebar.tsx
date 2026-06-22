@@ -140,19 +140,6 @@ export function Sidebar() {
       </AnimatePresence>
 
       {/* ── Desktop sidebar ── */}
-      <aside className="w-72 hidden md:flex flex-col h-[calc(100vh-2rem)] my-4 ml-4 sticky top-4 flex-shrink-0 z-20">
-        <div className="glass-panel border-white/5 flex-1 flex flex-col overflow-hidden shadow-2xl relative">
-          
-          {/* Cyberpunk Accent Corner */}
-          <div className="absolute top-0 right-0 w-16 h-16 pointer-events-none overflow-hidden">
-            <div className="absolute top-[-1px] right-[-1px] w-0 h-0 border-t-[20px] border-l-[20px] border-t-primary border-l-transparent opacity-80" />
-          </div>
-
-          {/* Logo Section */}
-          <div className="h-auto py-8 flex flex-col justify-center px-6 border-b border-white/5 relative flex-shrink-0">
-            <Link href="/" className="flex items-center gap-3 text-primary neon-text font-heading text-3xl tracking-widest relative z-10 hover:scale-[1.02] transition-transform">
-              <AnimatedLogo className="w-8 h-8" />
-              <span>SPECTRA</span>
       <aside className="hidden md:flex w-64 flex-col bg-black/40 backdrop-blur-2xl border-r border-white/5 sticky top-0 h-screen flex-shrink-0 relative shadow-[10px_0_30px_rgba(0,0,0,0.5)]">
         {/* Subtle glow edge */}
         <div className="absolute right-0 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-primary/20 to-transparent" />

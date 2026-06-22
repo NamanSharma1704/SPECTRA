@@ -1,7 +1,3 @@
-import type { NextConfig } from "next";
-
-import path from "path";
-
 // @ts-ignore
 const nextConfig = {
   eslint: {
