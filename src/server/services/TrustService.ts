@@ -266,7 +266,7 @@ export class TrustService {
         ? { status: "AVAILABLE" as const, accuracy: acc }
         : { status: "INSUFFICIENT_EVIDENCE" as const, evidenceCount: buildCount };
 
-      const leadTimeState = d.leadTimeCount > 0
+      const leadTimeState = d.average_lead_time_days > 0
         ? { status: "AVAILABLE" as const, leadTime }
         : { status: "NO_DATA" as const };
 
@@ -285,7 +285,7 @@ export class TrustService {
         avgMetaScore,
         peakMetaScore,
         buildCount,
-        omegaBuilds: Math.floor(calls * 0.2) // Just a visual proxy for now
+        omegaBuilds: Math.floor(calls * 0.2)
       };
     });
   }

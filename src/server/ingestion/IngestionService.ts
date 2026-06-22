@@ -123,7 +123,8 @@ export async function commitBuild(id: string): Promise<boolean> {
           .insert({
             name: build.creatorName,
             channel_id: build.channelId || null,
-            is_verified: build.confidence > 80
+            // Never auto-verify from AI confidence — is_verified is a human-curated flag
+            is_verified: false
           })
           .select("id")
           .single();
@@ -201,7 +202,8 @@ export async function commitBuild(id: string): Promise<boolean> {
         activity_id: activities[0].id,
         meta_score: build.confidence,
         confidence_score: build.confidence,
-        threat_level: build.confidence > 80 ? "OMEGA" : "ALPHA"
+        // Use a proper 3-tier distribution based on confidence thresholds
+        threat_level: build.confidence >= 85 ? "OMEGA" : build.confidence >= 65 ? "ALPHA" : "GAMMA"
       });
     }
     
@@ -351,8 +353,13 @@ export async function runFullIngestion(): Promise<IngestionJob> {
     runPatchIngestion()
   ]);
 
-  // Remove the child jobs from log — aggregate into this one
-  ingestionLog.splice(ingestionLog.indexOf(job) - 3, 3);
+  // Remove the child jobs from log — find them by ID instead of fragile index math
+  const childJobIds = new Set([ytJob.id, rdJob.id, patchJob.id]);
+  const removeIndices = ingestionLog
+    .map((j, i) => (childJobIds.has(j.id) ? i : -1))
+    .filter(i => i !== -1)
+    .reverse(); // Remove from end first to avoid index shifting
+  removeIndices.forEach(i => ingestionLog.splice(i, 1));
 
   job.stats.scanned = ytJob.stats.scanned + rdJob.stats.scanned + patchJob.stats.scanned;
   job.stats.extracted = ytJob.stats.extracted + rdJob.stats.extracted + patchJob.stats.extracted;

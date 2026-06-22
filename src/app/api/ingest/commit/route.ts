@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { commitBuild, rejectBuild, runFullIngestion } from "@/server/ingestion/IngestionService";
+import { requireAdmin } from "../auth";
 
 export async function POST(req: Request) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   const body = await req.json().catch(() => ({}));
   const { action, buildId } = body as { action?: string; buildId?: string };
 

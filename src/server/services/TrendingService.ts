@@ -6,7 +6,8 @@ export class TrendingService {
       slug: string;
       displayName: string;
       videoCount: number;
-      creators: Set<string>;
+      creatorIds: Set<string>;   // unique IDs for accurate count
+      creatorNames: Set<string>; // display names
       mentionScore: number;
       daysActive: Set<string>;
     }
@@ -39,16 +40,17 @@ export class TrendingService {
 
       const addMetrics = (record: Record<string, RawMetrics>, slug: string, displayName: string) => {
         if (!record[slug]) {
-          record[slug] = { slug, displayName, videoCount: 0, creators: new Set(), mentionScore: 0, daysActive: new Set() };
+          record[slug] = { slug, displayName, videoCount: 0, creatorIds: new Set(), creatorNames: new Set(), mentionScore: 0, daysActive: new Set() };
         }
         record[slug].videoCount++;
-        record[slug].creators.add(creatorName);
+        record[slug].creatorIds.add(creatorId);   // track by ID for accurate deduplication
+        record[slug].creatorNames.add(creatorName); // track name for display
         record[slug].mentionScore += baseScore;
         record[slug].daysActive.add(dayKey);
       };
 
-      // Creators
-      addMetrics(creatorsObj, creatorName, creatorName);
+      // Creators (track by ID for deduplication, display name for UI)
+      addMetrics(creatorsObj, creatorId, creatorName);
 
       // Gearsets
       if (Array.isArray(tags.gearset)) {
@@ -67,7 +69,7 @@ export class TrendingService {
     }
 
     const computeFinalScore = (metrics: RawMetrics) => {
-      const creatorCount = metrics.creators.size;
+      const creatorCount = metrics.creatorIds.size;
       const videoCount = metrics.videoCount;
       const daysCount = metrics.daysActive.size;
 
@@ -87,7 +89,7 @@ export class TrendingService {
       if (confidenceScore >= 70) confidenceLabel = "High";
       else if (confidenceScore >= 40) confidenceLabel = "Medium";
 
-      const creatorNames = Array.from(metrics.creators).map(name => name); // It's storing creatorName now, not id
+      const creatorNames = Array.from(metrics.creatorNames);
 
       return {
         slug: metrics.slug,
