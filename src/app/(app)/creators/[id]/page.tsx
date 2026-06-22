@@ -59,8 +59,8 @@ export default async function CreatorProfilePage({
     <div className="min-h-screen text-gray-200 font-mono">
 
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-3 mb-6 text-xs font-mono text-gray-600">
-          <Link href="/creators" className="hover:text-primary transition-colors flex items-center gap-1">
+        <nav className="flex items-center gap-3 mb-6 text-xs font-mono text-gray-600 relative z-20">
+          <Link href="/creators" className="hover:text-primary transition-colors flex items-center gap-1 cursor-pointer">
             <ChevronLeft className="w-3 h-3" /> CREATOR NETWORK
           </Link>
           <span>/</span>
