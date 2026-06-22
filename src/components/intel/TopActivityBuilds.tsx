@@ -66,7 +66,7 @@ export function TopActivityBuilds({ entries }: { entries: TopActivityEntry[] }) 
               {top.status === "AVAILABLE" && top.build && top.score !== undefined ? (
                 <>
                   {/* Meta Score & Stage */}
-                  <div className="flex flex-col 2xl:flex-row items-start 2xl:items-end justify-between gap-3 mb-6">
+                  <div className="flex flex-col items-start gap-3 mb-6">
                     <div>
                       <div className="text-xs font-heading text-gray-500 tracking-widest uppercase mb-1">
                         Meta Score
@@ -91,16 +91,16 @@ export function TopActivityBuilds({ entries }: { entries: TopActivityEntry[] }) 
                       </Link>
                     </div>
 
-                    <div className="flex items-center justify-between">
-                      <div>
+                    <div className="flex items-end justify-between gap-2">
+                      <div className="min-w-0 flex-1">
                         <div className="text-[10px] font-heading text-gray-500 tracking-widest uppercase mb-1">
                           Analyst
                         </div>
-                        <div className="text-xs font-sans text-gray-300 truncate max-w-[80px]">
+                        <div className="text-xs font-sans text-gray-300 truncate">
                           {top.build.creators?.name ?? "UNKNOWN"}
                         </div>
                       </div>
-                      <div className="text-right">
+                      <div className="text-right flex-shrink-0">
                         <div className="text-[10px] font-heading text-gray-500 tracking-widest uppercase mb-1">
                           Confidence
                         </div>

@@ -8,7 +8,7 @@ export function MetaMetricsRow({ metrics }: { metrics: any }) {
       
       {/* Meta Velocity */}
       <div className="bg-[#0A0A0A] border border-white/5 p-5 rounded-lg flex flex-col justify-between group hover:border-white/10 transition-colors">
-        <div className="flex items-start justify-between mb-4">
+        <div className="flex flex-wrap items-start justify-between gap-2 mb-4">
           <div>
             <div className="text-xs font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
               Meta Velocity
@@ -41,7 +41,7 @@ export function MetaMetricsRow({ metrics }: { metrics: any }) {
 
       {/* Patch Impact */}
       <div className="bg-[#0A0A0A] border border-white/5 p-5 rounded-lg flex flex-col justify-between group hover:border-white/10 transition-colors">
-        <div className="flex items-start justify-between mb-4">
+        <div className="flex flex-wrap items-start justify-between gap-2 mb-4">
           <div>
             <div className="text-xs font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
               Patch Impact
@@ -74,7 +74,7 @@ export function MetaMetricsRow({ metrics }: { metrics: any }) {
 
       {/* Trending Archetype */}
       <div className="bg-[#0A0A0A] border border-white/5 p-5 rounded-lg flex flex-col justify-between group hover:border-white/10 transition-colors">
-        <div className="flex items-start justify-between mb-4">
+        <div className="flex flex-wrap items-start justify-between gap-2 mb-4">
           <div>
             <div className="text-xs font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
               Trending Archetype
@@ -116,7 +116,7 @@ export function MetaMetricsRow({ metrics }: { metrics: any }) {
 
       {/* Average Trust Score */}
       <div className="bg-[#0A0A0A] border border-white/5 p-5 rounded-lg flex flex-col justify-between group hover:border-white/10 transition-colors">
-        <div className="flex items-start justify-between mb-4">
+        <div className="flex flex-wrap items-start justify-between gap-2 mb-4">
           <div>
             <div className="text-xs font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
               Average Trust Score

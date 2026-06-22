@@ -109,12 +109,12 @@ export function UnifiedLiveTicker({
 
   return (
     <div className="flex flex-col h-full bg-[#0A0A0A] border border-white/5 rounded-lg overflow-hidden">
-      <div className="flex items-center justify-between p-5 border-b border-white/5">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-5 border-b border-white/5">
         <h3 className="font-heading text-sm font-bold tracking-widest text-white uppercase flex items-center gap-2">
-          <Radio className="w-5 h-5 text-[#FF6A00] animate-pulse" />
-          Live Intelligence Feed
+          <Radio className="w-5 h-5 text-[#FF6A00] animate-pulse shrink-0" />
+          <span className="truncate">Live Intelligence Feed</span>
         </h3>
-        <span className="text-[10px] font-heading text-[#FF6A00] animate-pulse bg-[#FF6A00]/10 px-2 py-1 rounded border border-[#FF6A00]/20">
+        <span className="text-[10px] font-heading text-[#FF6A00] animate-pulse bg-[#FF6A00]/10 px-2 py-1 rounded border border-[#FF6A00]/20 shrink-0">
           STREAM ACTIVE
         </span>
       </div>
