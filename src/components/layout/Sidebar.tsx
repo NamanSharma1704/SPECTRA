@@ -60,13 +60,14 @@ function NavLink({ item, active, onClick }: { item: typeof NAV_ITEMS[0]; active:
         
         {/* Holographic background ping on active */}
         {active && (
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent opacity-50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-primary/5 to-transparent opacity-50" />
         )}
 
-        <item.icon className={`w-4 h-4 flex-shrink-0 relative z-10 transition-colors
-          ${active ? "text-primary" : "text-white/40 group-hover:text-primary/80"}`} />
+        <item.icon className={`w-4 h-4 flex-shrink-0 relative z-10 transition-all duration-300
+          ${active ? "text-primary drop-shadow-[0_0_8px_rgba(255,106,0,0.8)] scale-110" : "text-white/40 group-hover:text-primary/80 group-hover:scale-105"}`} />
         
-        <span className="font-sans font-medium tracking-wide truncate relative z-10 uppercase text-xs">
+        <span className={`font-sans font-medium tracking-wide truncate relative z-10 uppercase text-xs transition-colors duration-300
+          ${active ? "text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]" : "text-white/60 group-hover:text-white"}`}>
           {item.name}
         </span>
       </Link>
@@ -152,43 +153,43 @@ export function Sidebar() {
             <Link href="/" className="flex items-center gap-3 text-primary neon-text font-heading text-3xl tracking-widest relative z-10 hover:scale-[1.02] transition-transform">
               <AnimatedLogo className="w-8 h-8" />
               <span>SPECTRA</span>
-            </Link>
-            <div className="text-[10px] text-primary/60 font-sans mt-2 relative z-10 tracking-[0.2em] leading-relaxed uppercase font-bold">
-              Strategic Performance Evaluation<br/>& Cluster Tracking Analytics
-            </div>
-          </div>
+      <aside className="hidden md:flex w-64 flex-col bg-black/40 backdrop-blur-2xl border-r border-white/5 sticky top-0 h-screen flex-shrink-0 relative shadow-[10px_0_30px_rgba(0,0,0,0.5)]">
+        {/* Subtle glow edge */}
+        <div className="absolute right-0 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-primary/20 to-transparent" />
+        
+        {/* Logo Area */}
+        <div className="h-16 flex items-center px-6 border-b border-white/5 relative overflow-hidden group cursor-pointer">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <Link href="/" className="flex items-center gap-3 text-primary font-bold text-xl uppercase tracking-[0.2em] font-heading relative z-10">
+            <AnimatedLogo className="w-7 h-7 drop-shadow-[0_0_10px_rgba(255,106,0,0.8)]" />
+            <span className="neon-text">SPECTRA</span>
+          </Link>
+        </div>
 
-          {/* Navigation Section */}
-          <div className="flex-1 overflow-y-auto py-6 px-4 scrollbar-none">
-            <div className="text-[10px] uppercase tracking-widest text-white/30 font-sans mb-4 px-2 font-bold flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-              Active Modules
+        {/* Navigation Area */}
+        <nav className="flex-1 overflow-y-auto p-4 space-y-1">
+          <motion.div variants={containerVariants} initial="hidden" animate="show">
+            <div className="text-[10px] font-mono text-white/30 uppercase tracking-widest mb-3 px-4 flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-primary/50 animate-pulse" />
+              <span>System Modules</span>
             </div>
-            
-            <motion.nav 
-              className="flex flex-col gap-1.5"
-              variants={containerVariants}
-              initial="hidden"
-              animate="show"
-            >
-              {NAV_ITEMS.map((item) => (
-                <NavLink key={item.name} item={item} active={isActive(item.href)} />
-              ))}
-            </motion.nav>
-          </div>
+            {NAV_ITEMS.map((item) => (
+              <NavLink key={item.name} item={item} active={isActive(item.href)} />
+            ))}
+          </motion.div>
+        </nav>
 
-          {/* Footer Section */}
-          <div className="h-20 flex-shrink-0 border-t border-white/5 px-6 flex items-center gap-4 bg-black/40">
-             <div className="w-10 h-10 rounded-full border border-primary/20 bg-primary/10 flex items-center justify-center relative">
-               <div className="absolute inset-0 rounded-full border border-primary/40 animate-[spin_4s_linear_infinite]" />
-               <Radio className="w-5 h-5 text-primary" />
-             </div>
-             <div>
-               <div className="text-xs font-bold text-white font-sans uppercase tracking-widest">SHD NETWORK</div>
-               <div className="text-[9px] text-green-400 font-sans tracking-widest flex items-center gap-1">
-                 <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" /> ONLINE
-               </div>
-             </div>
+        {/* Bottom Agent Info */}
+        <div className="p-4 border-t border-white/5 bg-black/20">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-primary/10 border border-primary/30 rounded-lg flex items-center justify-center text-primary relative overflow-hidden shadow-[0_0_10px_rgba(255,106,0,0.1)]">
+              <Shield className="w-5 h-5 relative z-10 drop-shadow-[0_0_5px_rgba(255,106,0,1)]" />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent opacity-50" />
+            </div>
+            <div>
+              <div className="text-xs font-mono font-bold text-white/90 uppercase tracking-widest">Authorized</div>
+              <div className="text-[10px] text-primary/70 font-mono tracking-widest">CLEARANCE: OMEGA</div>
+            </div>
           </div>
         </div>
       </aside>

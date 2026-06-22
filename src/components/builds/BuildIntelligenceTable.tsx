@@ -151,11 +151,12 @@ export function BuildIntelligenceTable() {
         </div>
       )}
 
-      <div className="w-full bg-[#090909] border border-primary/20">
-        <div className="overflow-x-auto w-full p-4">
+      <div className="w-full bg-black/40 backdrop-blur-md border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] rounded-xl overflow-hidden relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
+        <div className="overflow-x-auto w-full p-4 relative z-10">
           <table className="w-full text-left border-collapse table-fixed min-w-[800px]">
           <thead>
-            <tr className="border-b border-primary/20 text-primary uppercase tracking-widest text-opacity-60 pb-2">
+            <tr className="border-b border-white/10 text-white/50 uppercase tracking-[0.2em] text-opacity-60 pb-2">
               <th className="py-3 px-2 font-normal w-12">Rank</th>
               <th className="py-3 px-2 font-normal w-24">Build ID</th>
               <th className="py-3 px-2 font-normal">Designation</th>
@@ -165,55 +166,55 @@ export function BuildIntelligenceTable() {
               <th className="py-3 px-2 font-normal w-40 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-primary/10">
+          <tbody className="divide-y divide-white/5">
             {mappedBuilds.map((build, idx) => {
               const maxScore = build.operationScore;
               const topThreat = build.topThreat;
               const inQueue = compareQueue.includes(build.id);
 
               return (
-                <tr key={build.id} className={`transition-colors group ${inQueue ? "bg-primary/10 border-l-2 border-l-primary" : "hover:bg-primary/5"}`}>
-                  <td className="py-3 px-2 text-white">#{idx + 1}</td>
-                  <td className="py-3 px-2 opacity-40 font-mono">{build.id.split('-')[0].toUpperCase()}</td>
-                  <td className="py-3 px-2 font-bold text-primary tracking-wide truncate" title={build.name.toUpperCase()}>{build.name.toUpperCase()}</td>
-                  <td className="py-3 px-2">[{build.archetype?.toUpperCase() || 'UNKNOWN'}]</td>
-                  <td className="py-3 px-2">
+                <tr key={build.id} className={`transition-all duration-300 group ${inQueue ? "bg-primary/20 border-l-2 border-l-primary shadow-[inset_4px_0_0_0_#ff6a00]" : "hover:bg-white/5"}`}>
+                  <td className="py-4 px-2 text-white/80">#{idx + 1}</td>
+                  <td className="py-4 px-2 opacity-40 font-mono text-[10px]">{build.id.split('-')[0].toUpperCase()}</td>
+                  <td className="py-4 px-2 font-bold text-white tracking-widest truncate group-hover:text-primary group-hover:drop-shadow-[0_0_8px_rgba(255,106,0,0.8)] transition-all" title={build.name.toUpperCase()}>{build.name.toUpperCase()}</td>
+                  <td className="py-4 px-2 text-white/50">[{build.archetype?.toUpperCase() || 'UNKNOWN'}]</td>
+                  <td className="py-4 px-2">
                     {build.creators?.id ? (
-                      <Link href={`/creators/${build.creators.id}`} className="hover:text-primary transition-colors underline decoration-primary/30 underline-offset-4">
+                      <Link href={`/creators/${build.creators.id}`} className="text-white/80 hover:text-primary transition-colors hover:underline decoration-primary/50 underline-offset-4">
                         {build.creators.name?.toUpperCase()}
                       </Link>
                     ) : (
-                      build.creators?.name?.toUpperCase() || (build.build_sources && build.build_sources.length > 0 ? build.build_sources[0].creator_name?.toUpperCase() : null) || 'SHD_AGENT'
+                      <span className="text-white/60">{build.creators?.name?.toUpperCase() || (build.build_sources && build.build_sources.length > 0 ? build.build_sources[0].creator_name?.toUpperCase() : null) || 'SHD_AGENT'}</span>
                     )}
                   </td>
-                  <td className="py-3 px-2">
+                  <td className="py-4 px-2">
                     <div className="flex items-center gap-2">
-                      <span className={`font-bold flex items-center gap-1 ${topThreat === 'OMEGA' ? 'text-red-500' : topThreat === 'ALPHA' ? 'text-orange-400' : 'text-gray-400'}`}>
-                        {topThreat === 'OMEGA' ? <ShieldAlert className="w-3 h-3" /> : <Activity className="w-3 h-3" />}
+                      <span className={`font-bold flex items-center gap-1.5 ${topThreat === 'OMEGA' ? 'text-red-500 drop-shadow-[0_0_5px_rgba(239,68,68,0.5)]' : topThreat === 'ALPHA' ? 'text-orange-400 drop-shadow-[0_0_5px_rgba(251,146,60,0.5)]' : 'text-gray-400'}`}>
+                        {topThreat === 'OMEGA' ? <ShieldAlert className="w-3.5 h-3.5" /> : <Activity className="w-3.5 h-3.5" />}
                         {topThreat}
                       </span>
-                      <span className="text-[10px] text-gray-500 font-mono border border-gray-800 px-1">{maxScore.toFixed(0)}</span>
+                      <span className="text-[10px] text-white/40 font-mono bg-white/5 px-1.5 py-0.5 rounded">{maxScore.toFixed(0)}</span>
                     </div>
                   </td>
-                  <td className="py-3 px-2 text-right">
-                    <div className="flex items-center justify-end gap-1">
+                  <td className="py-4 px-2 text-right">
+                    <div className="flex items-center justify-end gap-2">
                       {/* Compare toggle */}
                       <button
                         onClick={() => toggleCompare(build.id)}
                         title={inQueue ? "Remove from compare" : "Add to compare"}
-                        className={`inline-flex items-center gap-1 px-2 py-1 border text-[10px] transition-all
+                        className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md text-[10px] transition-all
                           ${inQueue
-                            ? "border-primary bg-primary text-black"
-                            : "border-gray-700 text-gray-500 hover:border-primary/40 hover:text-primary/70"}`}
+                            ? "bg-primary text-black shadow-[0_0_10px_rgba(255,106,0,0.5)]"
+                            : "bg-white/5 text-white/50 hover:bg-white/10 hover:text-white"}`}
                       >
-                        <GitCompare className="w-3 h-3" />
+                        <GitCompare className="w-3.5 h-3.5" />
                       </button>
                       {/* Inspect */}
                       <Link
                         href={`/builds/${build.id}`}
-                        className="inline-flex items-center gap-1 px-2 py-1 border border-primary/30 text-primary/80 hover:bg-primary hover:text-black transition-all"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-primary/10 text-primary hover:bg-primary hover:text-black hover:shadow-[0_0_15px_rgba(255,106,0,0.6)] transition-all font-bold tracking-widest"
                       >
-                        <Crosshair className="w-3 h-3" /> INSPECT
+                        <Crosshair className="w-3.5 h-3.5" /> INSPECT
                       </Link>
                     </div>
                   </td>
@@ -222,17 +223,17 @@ export function BuildIntelligenceTable() {
             })}
             {/* Filler rows if sparse */}
             {builds.length < 5 && Array.from({length: 5 - builds.length}).map((_, idx) => (
-              <tr key={`fake-${idx}`} className="hover:bg-primary/10 transition-colors opacity-30">
-                <td className="py-3 px-2 text-white">#{(builds.length + idx + 1)}</td>
-                <td className="py-3 px-2 font-mono">ENCRYPTED</td>
-                <td className="py-3 px-2 font-bold text-primary tracking-wide truncate">DATA_CORRUPTED</td>
-                <td className="py-3 px-2">[UNKNOWN]</td>
-                <td className="py-3 px-2">REDACTED</td>
-                <td className="py-3 px-2 text-gray-500">GAMMA</td>
-                <td className="py-3 px-2 text-right">
-                  <button disabled className="inline-flex items-center gap-1 px-2 py-1 border border-primary/10 text-primary/30 cursor-not-allowed">
+              <tr key={`fake-${idx}`} className="opacity-20 pointer-events-none">
+                <td className="py-4 px-2 text-white">#{(builds.length + idx + 1)}</td>
+                <td className="py-4 px-2 font-mono text-[10px]">ENCRYPTED</td>
+                <td className="py-4 px-2 font-bold tracking-widest text-white/50">DATA_CORRUPTED</td>
+                <td className="py-4 px-2 text-white/50">[UNKNOWN]</td>
+                <td className="py-4 px-2 text-white/50">REDACTED</td>
+                <td className="py-4 px-2 text-white/30">GAMMA</td>
+                <td className="py-4 px-2 text-right">
+                  <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-white/5 text-white/30 text-[10px] tracking-widest">
                     LOCKED
-                  </button>
+                  </span>
                 </td>
               </tr>
             ))}

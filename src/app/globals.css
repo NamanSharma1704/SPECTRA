@@ -94,6 +94,8 @@
     padding: 0;
     min-height: 100vh;
     background-color: #050505;
+    background-image: radial-gradient(circle at 50% 0%, #111111 0%, #050505 50%, #020202 100%);
+    background-attachment: fixed;
     color: #FFFFFF;
     scrollbar-width: thin;
     scrollbar-color: #FF5500 #0A0A0A;
@@ -101,23 +103,22 @@
 
   /* Custom Webkit Scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #0A0A0A;
-    border-left: 1px solid #1A1A1A;
+    background: rgba(10, 10, 10, 0.8);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #333333;
-    border-radius: 9999px; /* Pill shape */
-    border: 2px solid #0A0A0A;
+    background: #FF5500;
+    border-radius: 4px;
+    transition: background 0.3s ease;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #FF5500;
+    background: #FF7733;
   }
 
   ::-webkit-scrollbar-corner {
