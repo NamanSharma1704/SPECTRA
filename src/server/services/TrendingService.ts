@@ -1,7 +1,7 @@
 import { db } from "../db";
+import { unstable_cache } from "next/cache";
 
-export class TrendingService {
-  private static computeMetricsFromVideos(videos: any[], days: number) {
+export function computeMetricsFromVideos(videos: any[], days: number) {
     interface RawMetrics {
       slug: string;
       displayName: string;
@@ -119,11 +119,8 @@ export class TrendingService {
     };
   }
 
-  /**
-   * Calculates trending items over a specific time window
-   * @param days Window size (default 14 days)
-   */
-  static async getTrending(days = 14) {
+const getTrendingCached = unstable_cache(
+  async (days: number) => {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
     
@@ -134,7 +131,7 @@ export class TrendingService {
 
     if (error) throw new Error(`Failed to fetch recent videos: ${error.message}`);
 
-    const res = this.computeMetricsFromVideos(videos ?? [], days);
+    const res = computeMetricsFromVideos(videos ?? [], days);
 
     return {
       timeframeDays: days,
@@ -144,9 +141,13 @@ export class TrendingService {
       trendingActivities: res.activities,
       trendingCreators: res.creators,
     };
-  }
+  },
+  ['trending-stats-cache'],
+  { tags: ['meta-leaderboard'], revalidate: 3600 }
+);
 
-  static async getConsensusSignals(days = 14) {
+const getConsensusSignalsCached = unstable_cache(
+  async (days: number) => {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
     
@@ -185,9 +186,13 @@ export class TrendingService {
       }))
       .sort((a, b) => b.creatorCount - a.creatorCount)
       .slice(0, 10);
-  }
+  },
+  ['consensus-signals-cache'],
+  { tags: ['meta-leaderboard'], revalidate: 3600 }
+);
 
-  static async getPatchImpact(days = 14) {
+const getPatchImpactCached = unstable_cache(
+  async (days: number) => {
     const now = new Date();
     const midDate = new Date();
     midDate.setDate(now.getDate() - days);
@@ -205,8 +210,8 @@ export class TrendingService {
       .gte("published_at", oldDate.toISOString())
       .lt("published_at", midDate.toISOString());
 
-    const currentMetrics = this.computeMetricsFromVideos(currentVideos ?? [], days);
-    const oldMetrics = this.computeMetricsFromVideos(oldVideos ?? [], days);
+    const currentMetrics = computeMetricsFromVideos(currentVideos ?? [], days);
+    const oldMetrics = computeMetricsFromVideos(oldVideos ?? [], days);
 
     const calculateDeltas = (current: any[], old: any[]) => {
       const oldMap = new Map(old.map((x) => [x.slug, x]));
@@ -263,6 +268,26 @@ export class TrendingService {
       mostDecreased,
       fastestGrowing
     };
+  },
+  ['patch-impact-cache'],
+  { tags: ['meta-leaderboard'], revalidate: 3600 }
+);
+
+export class TrendingService {
+  /**
+   * Calculates trending items over a specific time window
+   * @param days Window size (default 14 days)
+   */
+  static async getTrending(days = 14) {
+    return getTrendingCached(days);
+  }
+
+  static async getConsensusSignals(days = 14) {
+    return getConsensusSignalsCached(days);
+  }
+
+  static async getPatchImpact(days = 14) {
+    return getPatchImpactCached(days);
   }
 
   static async getMetaLifecycleStatus(slug: string, type: "gearset" | "weapons") {
@@ -305,8 +330,8 @@ export class TrendingService {
       .gte("published_at", oldDate.toISOString())
       .lt("published_at", midDate.toISOString());
 
-    const currentMetrics = this.computeMetricsFromVideos(currentVideos ?? [], 14);
-    const oldMetrics = this.computeMetricsFromVideos(oldVideos ?? [], 14);
+    const currentMetrics = computeMetricsFromVideos(currentVideos ?? [], 14);
+    const oldMetrics = computeMetricsFromVideos(oldVideos ?? [], 14);
 
     const currentItem = type === "gearset" 
       ? currentMetrics.gearsets.find(g => g.slug === slug) 

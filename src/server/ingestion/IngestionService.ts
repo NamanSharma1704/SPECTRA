@@ -4,6 +4,7 @@
  * Now fully backed by Supabase persistent queue.
  */
 
+import { revalidateTag } from "next/cache";
 import { scanYouTube } from "./YouTubeParser";
 import { scanAllSubreddits } from "./RedditParser";
 import { scanOfficialPatches } from "./PatchParser";
@@ -232,6 +233,8 @@ export async function commitBuild(id: string): Promise<boolean> {
         });
         
         await (db as any).from("ingestion_staged_builds").update({ status: "COMMITTED", updated_at: new Date().toISOString() }).eq("id", id);
+        // @ts-ignore
+        revalidateTag("meta-leaderboard");
         return true;
       }
     }
@@ -248,6 +251,8 @@ export async function commitBuild(id: string): Promise<boolean> {
 
       if (insertError) throw insertError;
       await (db as any).from("ingestion_staged_builds").update({ status: "COMMITTED", updated_at: new Date().toISOString() }).eq("id", id);
+      // @ts-ignore
+      revalidateTag("meta-leaderboard");
       return true;
     }
 
@@ -290,6 +295,8 @@ export async function commitBuild(id: string): Promise<boolean> {
     }
     
     await (db as any).from("ingestion_staged_builds").update({ status: "COMMITTED", updated_at: new Date().toISOString() }).eq("id", id);
+    // @ts-ignore
+    revalidateTag("meta-leaderboard");
     return true;
   } catch (err: any) {
     console.error("Failed to commit build:", err);

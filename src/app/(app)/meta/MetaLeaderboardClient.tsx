@@ -87,16 +87,17 @@ export function MetaLeaderboardClient({ leaderboardData }: { leaderboardData: Bu
         </p>
       </div>
 
-      <div className="space-y-3">
-        {/* Table Header */}
-        <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-3 text-[10px] text-gray-500 font-sans tracking-[0.2em] font-bold uppercase border-b border-white/5 bg-black/20 rounded-t-lg">
-          <div className="col-span-1 text-center">Rank</div>
-          <div className="col-span-4">Configuration ID</div>
-          <div className="col-span-2">Role Matrix</div>
-          <div className="col-span-2">Primary Weapon</div>
-          <div className="col-span-1 text-center">Tier</div>
-          <div className="col-span-2 text-right">Meta Score</div>
-        </div>
+      <div className="overflow-x-auto pb-4">
+        <div className="space-y-3 min-w-[800px]">
+          {/* Table Header */}
+          <div className="grid grid-cols-12 gap-4 px-6 py-3 text-[10px] text-gray-500 font-sans tracking-[0.2em] font-bold uppercase border-b border-white/5 bg-black/20 rounded-t-lg">
+            <div className="col-span-1 text-center">Rank</div>
+            <div className="col-span-4">Configuration ID</div>
+            <div className="col-span-2">Role Matrix</div>
+            <div className="col-span-2">Primary Weapon</div>
+            <div className="col-span-1 text-center">Tier</div>
+            <div className="col-span-2 text-right">Meta Score</div>
+          </div>
 
         {/* Leaderboard Rows */}
         {leaderboardData.map((build, i) => (
@@ -111,7 +112,7 @@ export function MetaLeaderboardClient({ leaderboardData }: { leaderboardData: Bu
               ref={(el) => { rowsRef.current[i] = el; }}
               className="block"
             >
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center p-4 glass-card glass-card-hover cursor-pointer group relative overflow-hidden">
+              <div className="grid grid-cols-12 gap-4 items-center p-4 glass-card glass-card-hover cursor-pointer group relative overflow-hidden">
                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-transparent group-hover:bg-primary transition-colors shadow-[0_0_15px_rgba(255,106,0,1)] opacity-0 group-hover:opacity-100"></div>
                 
                 {/* Scanline overlay on hover */}
@@ -161,6 +162,7 @@ export function MetaLeaderboardClient({ leaderboardData }: { leaderboardData: Bu
             </Link>
           </motion.div>
         ))}
+        </div>
       </div>
     </div>
   );

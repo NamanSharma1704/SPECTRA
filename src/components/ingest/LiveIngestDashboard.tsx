@@ -86,8 +86,9 @@ export function LiveIngestDashboard({ apiKeyConfigured }: LiveIngestDashboardPro
             <span className="text-sm font-heading font-bold text-white tracking-widest uppercase drop-shadow-md">Live Staging Queue</span>
             <span className="ml-auto text-[10px] font-sans font-bold tracking-widest text-amber-400 bg-amber-900/30 px-2 py-1 border border-amber-500/30">{queue.filter((b) => b.status === "PENDING").length} PENDING</span>
           </div>
-          <div className="space-y-2 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
-            <AnimatePresence>
+          <div className="overflow-x-auto custom-scrollbar">
+            <div className="space-y-2 max-h-80 overflow-y-auto pr-2 min-w-[700px]">
+              <AnimatePresence>
               {queue.map((build) => (
                 <motion.div 
                   initial={{ opacity: 0, x: -10 }}
@@ -127,7 +128,8 @@ export function LiveIngestDashboard({ apiKeyConfigured }: LiveIngestDashboardPro
                   )}
                 </motion.div>
               ))}
-            </AnimatePresence>
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       )}
@@ -138,7 +140,8 @@ export function LiveIngestDashboard({ apiKeyConfigured }: LiveIngestDashboardPro
           <div className="flex items-center gap-3 mb-4 border-b border-white/10 pb-3">
             <span className="text-sm font-heading font-bold text-gray-300 tracking-widest uppercase">Ingestion Log</span>
           </div>
-          <div className="space-y-2">
+          <div className="overflow-x-auto custom-scrollbar">
+            <div className="space-y-2 min-w-[600px]">
             {log.map((job) => (
               <div key={job.id} className={`flex items-center gap-3 border px-4 py-3 text-[10px] font-sans font-bold tracking-widest uppercase bg-black/40 ${
                 job.status === "ERROR" ? "border-red-900/50" : "border-white/5"
@@ -161,6 +164,7 @@ export function LiveIngestDashboard({ apiKeyConfigured }: LiveIngestDashboardPro
                 </span>
               </div>
             ))}
+            </div>
           </div>
         </div>
       )}

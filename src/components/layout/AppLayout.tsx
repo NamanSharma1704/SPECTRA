@@ -1,5 +1,6 @@
 import { Sidebar } from "./Sidebar";
 import { HologramBackground } from "./HologramBackground";
+import { RealtimeHUD } from "./RealtimeHUD";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,6 +9,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       
       {/* Desktop sidebar — hidden on mobile (Sidebar renders its own mobile bar) */}
       <Sidebar />
+      <RealtimeHUD />
 
       {/* Main content area */}
       <div className="flex-1 flex flex-col min-w-0">
