@@ -3,7 +3,6 @@ import { IntelligenceService } from "@/server/services/IntelligenceService";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { CommandCenterHero } from "@/components/intel/CommandCenterHero";
 import { MetaAlertsFeed } from "@/components/intel/MetaAlertsFeed";
-import { PatchImpactPanel } from "@/components/intel/PatchImpactPanel";
 import { ConsensusAlerts } from "@/components/intel/ConsensusAlerts";
 import { CreatorSignalFeed } from "@/components/intel/CreatorSignalFeed";
 import { EmergingBuildsPanel } from "@/components/intel/EmergingBuildsPanel";
