@@ -160,101 +160,133 @@ export class CreatorRepository {
       `);
     if (error) throw new Error(`Failed to fetch creators: ${error.message}`);
 
-    // For each creator, count builds and compute avg meta score
-    const enriched = await Promise.all(
-      (creators ?? []).map(async (creator) => {
-        const { data: primaryBuilds } = await db
-          .from("builds")
-          .select(`
-            id, name, archetype,
-            build_activity_scores (meta_score, threat_level)
-          `)
-          .eq("creator_id", creator.id);
+    const creatorIds = (creators ?? []).map((c) => c.id);
+    if (creatorIds.length === 0) return [];
 
-        const { data: sourceBuilds } = await db
-          .from("builds")
-          .select(`
-            id, name, archetype,
-            build_activity_scores (meta_score, threat_level),
-            build_sources!inner(creator_id)
-          `)
-          .eq("build_sources.creator_id", creator.id);
+    // Batch queries — 4 total regardless of creator count (was 4*N before)
+    const [allBuildsRes, sourceBuildLinksRes, allVideosRes, allContributionsRes] = await Promise.all([
+      // All primary builds for all creators at once
+      db.from("builds").select(`
+        id, name, archetype, creator_id,
+        build_activity_scores (meta_score, threat_level)
+      `).in("creator_id", creatorIds),
 
-        const buildMap = new Map();
-        [...(primaryBuilds ?? []), ...(sourceBuilds ?? [])].forEach(b => buildMap.set(b.id, b));
-        const buildList = Array.from(buildMap.values());
-        const allScores = buildList.flatMap((b) =>
-          (b.build_activity_scores as any[]).map((s) => s.meta_score as number)
-        );
-        const avgMeta = allScores.length
-          ? Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length)
-          : 0;
-        const peakMeta = allScores.length ? Math.round(Math.max(...allScores)) : 0;
-        const omegaBuilds = buildList.filter((b) =>
-          (b.build_activity_scores as any[]).some((s) => s.threat_level === "OMEGA")
-        ).length;
+      // All build_sources links so we can map sourced builds to creators
+      (db as any).from("build_sources").select(`
+        creator_id, build_id,
+        builds (
+          id, name, archetype,
+          build_activity_scores (meta_score, threat_level)
+        )
+      `).in("creator_id", creatorIds),
 
-        const { count: videoCount } = await (db as any)
-          .from("creator_videos")
-          .select("*", { count: "exact", head: true })
-          .eq("creator_id", creator.id);
+      // Video counts per creator
+      (db as any).from("creator_videos").select("creator_id").in("creator_id", creatorIds),
 
-                const trustData: any = (creator as any).creator_trust_scores?.[0] ?? (creator as any).creator_trust_scores ?? {};
+      // All intelligence contributions for all creators
+      (db as any).from("build_sources").select(`
+        id, build_id, creator_id, source_url, source_title, source_role, published_at, confidence_score,
+        builds (
+          name, archetype,
+          build_activity_scores (meta_score, threat_level, confidence_score),
+          build_sources (id)
+        )
+      `).in("creator_id", creatorIds),
+    ]);
 
-        const { data: rawContributions } = await (db as any)
-          .from("build_sources")
-          .select(`
-            id, build_id, creator_id, source_url, source_title, source_role, published_at, confidence_score,
-            builds (
-              name, archetype,
-              build_activity_scores (meta_score, threat_level, confidence_score),
-              build_sources (id)
-            )
-          `)
-          .eq("creator_id", creator.id);
-          
-        const intelligenceContributions = CreatorRepository.buildIntelligenceContributions(rawContributions || []);
-        const snapshot = CreatorRepository.computeSnapshot(creator.id, creator.name, trustData, intelligenceContributions);
+    const allPrimaryBuilds: any[] = allBuildsRes.data ?? [];
+    const allSourceLinks: any[] = sourceBuildLinksRes.data ?? [];
+    const allVideos: any[] = allVideosRes.data ?? [];
+    const allContributions: any[] = allContributionsRes.data ?? [];
 
+    // Group by creator_id for O(1) lookup
+    const primaryBuildsByCreator = new Map<string, any[]>();
+    allPrimaryBuilds.forEach((b) => {
+      const arr = primaryBuildsByCreator.get(b.creator_id) ?? [];
+      arr.push(b);
+      primaryBuildsByCreator.set(b.creator_id, arr);
+    });
 
-        return {
-          ...snapshot,
-          id: creator.id,
-          name: creator.name,
-          is_verified: creator.is_verified,
-          youtube_url: creator.youtube_url,
-          buildCount: buildList.length,
-          videoCount: videoCount || 0,
-          avgMetaScore: avgMeta,
-          peakMetaScore: peakMeta,
-          omegaBuilds,
-          archetypes: [...new Set(buildList.map((b) => b.archetype).filter(Boolean))],
-          
-          // Trust Intelligence Metrics
-          hasTrustData: Object.keys(trustData).length > 0,
-          trustState: Object.keys(trustData).length > 0 
-            ? { status: "AVAILABLE" as const, score: trustData.trust_score, tier: trustData.trust_tier } 
-            : { status: "NO_DATA" as const },
-          accuracyState: Object.keys(trustData).length > 0
-            ? { status: "AVAILABLE" as const, accuracy: Math.round(trustData.hybrid_accuracy) }
-            : { status: "NO_DATA" as const },
-          leadTimeState: Object.keys(trustData).length > 0 && trustData.average_lead_time_days > 0
-            ? { status: "AVAILABLE" as const, leadTime: Math.round(trustData.average_lead_time_days) }
-            : { status: "NO_DATA" as const },
-          
-          successfulCalls: trustData.successful_calls_lifetime || 0,
-          emergingCalls: trustData.emerging_calls_lifetime || 0,
-          
-          // Trend metrics (Compare 90d to Lifetime)
-          accuracy90dState: Object.keys(trustData).length > 0
-            ? { status: "AVAILABLE" as const, accuracy: Math.round(trustData.accuracy_90d) }
-            : { status: "NO_DATA" as const },
-          accuracyLifetimeState: Object.keys(trustData).length > 0
-            ? { status: "AVAILABLE" as const, accuracy: Math.round(trustData.accuracy_lifetime) }
-            : { status: "NO_DATA" as const },
-        };
-      })
-    );
+    const sourceBuildsByCreator = new Map<string, Map<string, any>>();
+    allSourceLinks.forEach((link) => {
+      if (!link.builds) return;
+      const map = sourceBuildsByCreator.get(link.creator_id) ?? new Map();
+      map.set(link.builds.id, link.builds);
+      sourceBuildsByCreator.set(link.creator_id, map);
+    });
+
+    const videoCountByCreator = new Map<string, number>();
+    allVideos.forEach((v) => {
+      videoCountByCreator.set(v.creator_id, (videoCountByCreator.get(v.creator_id) ?? 0) + 1);
+    });
+
+    const contributionsByCreator = new Map<string, any[]>();
+    allContributions.forEach((c) => {
+      const arr = contributionsByCreator.get(c.creator_id) ?? [];
+      arr.push(c);
+      contributionsByCreator.set(c.creator_id, arr);
+    });
+
+    // Process each creator using in-memory grouped data — no additional DB calls
+    const enriched = (creators ?? []).map((creator) => {
+      const primaryBuilds = primaryBuildsByCreator.get(creator.id) ?? [];
+      const sourcedMap = sourceBuildsByCreator.get(creator.id) ?? new Map();
+      const buildMap = new Map<string, any>();
+      primaryBuilds.forEach((b) => buildMap.set(b.id, b));
+      sourcedMap.forEach((b: any, id: string) => { if (!buildMap.has(id)) buildMap.set(id, b); });
+      const buildList = Array.from(buildMap.values());
+
+      const allScores = buildList.flatMap((b) =>
+        (b.build_activity_scores as any[]).map((s) => s.meta_score as number)
+      );
+      const avgMeta = allScores.length
+        ? Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length)
+        : 0;
+      const peakMeta = allScores.length ? Math.round(Math.max(...allScores)) : 0;
+      const omegaBuilds = buildList.filter((b) =>
+        (b.build_activity_scores as any[]).some((s) => s.threat_level === "OMEGA")
+      ).length;
+
+      const videoCount = videoCountByCreator.get(creator.id) ?? 0;
+      const trustData: any = (creator as any).creator_trust_scores?.[0] ?? (creator as any).creator_trust_scores ?? {};
+      const rawContributions = contributionsByCreator.get(creator.id) ?? [];
+      const intelligenceContributions = CreatorRepository.buildIntelligenceContributions(rawContributions);
+      const snapshot = CreatorRepository.computeSnapshot(creator.id, creator.name, trustData, intelligenceContributions);
+
+      const hasTrust = Object.keys(trustData).length > 0;
+
+      return {
+        ...snapshot,
+        id: creator.id,
+        name: creator.name,
+        is_verified: creator.is_verified,
+        youtube_url: creator.youtube_url,
+        buildCount: buildList.length,
+        videoCount,
+        avgMetaScore: avgMeta,
+        peakMetaScore: peakMeta,
+        omegaBuilds,
+        archetypes: [...new Set(buildList.map((b) => b.archetype).filter(Boolean))],
+        hasTrustData: hasTrust,
+        trustState: hasTrust
+          ? { status: "AVAILABLE" as const, score: trustData.trust_score, tier: trustData.trust_tier }
+          : { status: "NO_DATA" as const },
+        accuracyState: hasTrust
+          ? { status: "AVAILABLE" as const, accuracy: Math.round(trustData.hybrid_accuracy) }
+          : { status: "NO_DATA" as const },
+        leadTimeState: hasTrust && trustData.average_lead_time_days > 0
+          ? { status: "AVAILABLE" as const, leadTime: Math.round(trustData.average_lead_time_days) }
+          : { status: "NO_DATA" as const },
+        successfulCalls: trustData.successful_calls_lifetime || 0,
+        emergingCalls: trustData.emerging_calls_lifetime || 0,
+        accuracy90dState: hasTrust
+          ? { status: "AVAILABLE" as const, accuracy: Math.round(trustData.accuracy_90d) }
+          : { status: "NO_DATA" as const },
+        accuracyLifetimeState: hasTrust
+          ? { status: "AVAILABLE" as const, accuracy: Math.round(trustData.accuracy_lifetime) }
+          : { status: "NO_DATA" as const },
+      };
+    });
 
     // Filter out creators with absolutely no intelligence data (no trust scores)
     const activeCreators = enriched.filter((c) => c.hasTrustData);

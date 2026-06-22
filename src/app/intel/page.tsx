@@ -23,7 +23,9 @@ export default async function IntelPage() {
   try {
     intel = await IntelligenceService.getDashboardIntel();
   } catch (err: any) {
-    notFound();
+    // Only use notFound for genuine "no data" scenarios; re-throw other errors
+    // so Next.js renders the error boundary instead of a misleading 404
+    throw new Error(`Failed to load intelligence briefing: ${err?.message ?? "Unknown error"}`);
   }
 
   const {

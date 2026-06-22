@@ -84,7 +84,8 @@ export class IntelligenceService {
         archetype: b.archetype,
         creator: (b.creators as any)?.name ?? "UNKNOWN",
         peakScore: Math.round(b.peak),
-        velocity: i < 2 ? "RISING" : i > 3 ? "FALLING" : "STABLE",
+        // Score-based velocity: top quartile = RISING, bottom quartile = FALLING
+        velocity: b.peak >= 90 ? "RISING" : b.peak >= 75 ? "STABLE" : "FALLING",
         threat: (b.build_activity_scores as any[])?.[0]?.threat_level ?? "GAMMA",
       })),
       emergingBuilds: emergingBuilds.map((b) => ({

@@ -3,6 +3,11 @@ import { MetaLeaderboardClient } from "./MetaLeaderboardClient";
 
 export const dynamic = "force-dynamic";
 
+export const metadata = {
+  title: "SPECTRA | Meta Leaderboard",
+  description: "Live Division 2 meta leaderboard. See the top builds ranked by meta score, threat level, and activity performance.",
+};
+
 export default async function MetaLeaderboard() {
   const leaderboardData = await MetaRepository.getGlobalLeaderboard();
   
