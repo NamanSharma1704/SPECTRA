@@ -176,7 +176,8 @@ export async function commitBuild(id: string): Promise<boolean> {
       is_public: true,
       fingerprint: build.fingerprint,
       integrity_status: build.integrityStatus,
-      stability_score: 80,
+      // Derive stability from community validation score (0–100 range from VerificationEngine)
+      stability_score: Math.min(100, Math.max(0, Math.round(build.trustMetrics.communityValidation))),
       consensus_score: build.trustMetrics.communityValidation,
       status: "EMERGING",
       last_verified_at: new Date().toISOString()

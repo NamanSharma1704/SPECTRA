@@ -31,12 +31,14 @@ export class RecommendationService {
     if (type === "Meta Pick") {
       score = (normMeta * 0.40) + (normCons * 0.25) + (normConf * 0.20) + (normStab * 0.15);
     } else if (type === "Safe Pick") {
-      // Hardcode survivability bump for now
+      // Survivability based on known tank/support gearset slugs from taxonomy
       const survivability = build.gearset.slug.includes("foundry") || build.gearset.slug.includes("vanguard") || build.gearset.slug.includes("gila") ? 100 : 50;
       score = (normConf * 0.40) + (normStab * 0.30) + (normCons * 0.20) + (survivability * 0.10);
     } else if (type === "Emerging Pick") {
-      const trustScore = 80; // Default placeholder for trust, could be dynamic based on creator trust tiers
-      const growthScore = 80; // Placeholder for growth
+      // Derive trust proxy from confidence (higher confidence = more creator endorsement)
+      // Derive growth proxy from lifecycle — Emerging Meta gets high growth score
+      const trustScore = Math.min(100, normConf * 1.2);
+      const growthScore = build.lifecycle === "Emerging Meta" ? 100 : build.lifecycle === "Established Meta" ? 70 : 40;
       score = (trustScore * 0.35) + (growthScore * 0.30) + (normConf * 0.20) + (normCons * 0.15);
     } else if (type === "Returning Agent Pick") {
       const easeOfUse = build.gearset.slug.includes("striker") || build.gearset.slug.includes("hunters") ? 90 : 50;

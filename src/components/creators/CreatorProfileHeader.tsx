@@ -62,10 +62,10 @@ export function CreatorProfileHeader({ creator, stats }: CreatorProfileHeaderPro
         <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
           {[
             { label: "TRUST SCORE", value: stats.trustScoreState?.status === "AVAILABLE" ? `${stats.trustScoreState.score}` : "N/A", color: "text-primary" },
-            { label: "VERIFIED BUILDS", value: `${stats.verifiedBuilds || Math.floor(stats.buildCount * 0.85)}`, color: "text-green-400" },
-            { label: "SOURCE VIDEOS", value: `${stats.sourceVideos || Math.floor(stats.buildCount * 1.2)}`, color: "text-purple-400" },
+            { label: "VERIFIED BUILDS", value: stats.verifiedBuilds != null ? `${stats.verifiedBuilds}` : "N/A", color: "text-green-400" },
+            { label: "SOURCE VIDEOS", value: stats.sourceVideos != null ? `${stats.sourceVideos}` : "N/A", color: "text-purple-400" },
             { label: "AVG META", value: stats.avgMetaScoreState?.status === "AVAILABLE" ? `${stats.avgMetaScoreState.accuracy}` : "N/A", color: "text-cyan-400" },
-            { label: "PEAK META", value: `${stats.peakMetaScore}`, color: "text-orange-400" },
+            { label: "PEAK META", value: stats.peakMetaScore > 0 ? `${stats.peakMetaScore}` : "N/A", color: "text-orange-400" },
             { label: "OMEGA BUILDS", value: `${stats.omegaBuilds}`, color: "text-red-500" },
           ].map((stat) => (
             <div key={stat.label} className="border border-gray-800 bg-black/40 px-4 py-3 text-center">

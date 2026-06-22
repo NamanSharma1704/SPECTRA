@@ -184,7 +184,9 @@ export class TrustService {
       // Trust Score Calculation
       // We use the weightedScoreLifetime instead of raw count to enforce domain weighting
       const participationScore = Math.min(100, (stats.weightedScoreLifetime / 10) * 100);
-      const sourceRel = 80;
+      // Source reliability: ratio of successful calls among total calls (normalized 0–100)
+      // Creators with no calls start at 50 (neutral), more successful calls raise this toward 100
+      const sourceRel = totalLT > 0 ? Math.min(100, Math.round((successfulLT / totalLT) * 100)) : 50;
       const recencyScore = stats.emerging90d.size > 0 ? 100 : 0;
 
       const rawTrust = (hybridAcc * 0.4) + (participationScore * 0.3) + (sourceRel * 0.2) + (recencyScore * 0.1);
@@ -253,16 +255,15 @@ export class TrustService {
       const acc = Math.round(d.hybrid_accuracy);
       const calls = d.successful_calls_lifetime;
       const emerging = d.emerging_calls_lifetime;
-      
-      const peakMetaScore = (calls * 15) + (emerging * 5);
-      const avgMetaScore = Math.round(peakMetaScore * 0.7);
+
+      // Use real DB counts only — do not manufacture fake meta scores
       const buildCount = calls + emerging;
 
-      const trustScoreState = buildCount >= 2 
+      const trustScoreState = buildCount >= 2
         ? { status: "AVAILABLE" as const, trustScore: d.trust_score }
         : { status: "INSUFFICIENT_EVIDENCE" as const, evidenceCount: buildCount };
 
-      const accuracyState = buildCount >= 2 
+      const accuracyState = buildCount >= 2
         ? { status: "AVAILABLE" as const, accuracy: acc }
         : { status: "INSUFFICIENT_EVIDENCE" as const, evidenceCount: buildCount };
 
@@ -280,12 +281,13 @@ export class TrustService {
         successfulCalls: calls,
         avgLeadTimeState: leadTimeState,
         emergingCalls: emerging,
-        accuracy90dState: { status: "AVAILABLE" as const, accuracy: Math.round(d.accuracy_90d) },
-        accuracyLifetimeState: { status: "AVAILABLE" as const, accuracy: Math.round(d.accuracy_lifetime) },
-        avgMetaScore,
-        peakMetaScore,
+        accuracy90dState: d.accuracy_90d != null
+          ? { status: "AVAILABLE" as const, accuracy: Math.round(d.accuracy_90d) }
+          : { status: "NO_DATA" as const },
+        accuracyLifetimeState: d.accuracy_lifetime != null
+          ? { status: "AVAILABLE" as const, accuracy: Math.round(d.accuracy_lifetime) }
+          : { status: "NO_DATA" as const },
         buildCount,
-        omegaBuilds: Math.floor(calls * 0.2)
       };
     });
   }

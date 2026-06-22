@@ -108,22 +108,21 @@ export function classifyVideo(title: string, description: string, transcript: st
     }
   }
 
-  // Activities (Keeping these hardcoded for now)
-  const checkActivity = (keyword: string, name: string, slug: string) => {
-    let matchedSources = [];
-    if (titleLow.includes(keyword)) matchedSources.push("Title");
-    if (descLow.includes(keyword)) matchedSources.push("Description");
-    if (transLow.includes(keyword)) matchedSources.push("Transcript");
-    if (matchedSources.length > 0) {
-      addTag("activity", name, slug, matchedSources.join(", "), false);
+  // Activities — detected from the taxonomy file (type: "activity"), not hardcoded
+  const activityItems = taxonomy.filter((item: any) => item.type === "activity");
+  for (const actItem of activityItems) {
+    for (const alias of actItem.aliases) {
+      const matched: string[] = [];
+      if (titleLow.includes(alias)) matched.push("Title");
+      if (descLow.includes(alias)) matched.push("Description");
+      if (transLow.includes(alias)) matched.push("Transcript");
+      if (matched.length > 0) {
+        addTag("activity", actItem.canonical, actItem.slug, matched.join(", "), false);
+        break;
+      }
     }
-  };
+  }
 
-  checkActivity("legendary", "Legendary", "legendary");
-  checkActivity("incursion", "Incursion", "incursion");
-  checkActivity("countdown", "Countdown", "countdown");
-  checkActivity("summit", "The Summit", "summit");
-  
   return { primary_category: primaryCategory, content_tags: tags };
 }
 
