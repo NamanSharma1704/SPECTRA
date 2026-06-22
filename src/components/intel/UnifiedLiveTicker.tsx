@@ -109,17 +109,17 @@ export function UnifiedLiveTicker({
 
   return (
     <div className="flex flex-col h-full bg-[#0A0A0A] border border-white/5 rounded-lg overflow-hidden">
-      <div className="flex items-center justify-between p-4 border-b border-white/5">
-        <h3 className="font-heading text-[11px] font-bold tracking-widest text-white uppercase flex items-center gap-2">
-          <Radio className="w-4 h-4 text-[#FF6A00] animate-pulse" />
+      <div className="flex items-center justify-between p-5 border-b border-white/5">
+        <h3 className="font-heading text-sm font-bold tracking-widest text-white uppercase flex items-center gap-2">
+          <Radio className="w-5 h-5 text-[#FF6A00] animate-pulse" />
           Live Intelligence Feed
         </h3>
-        <span className="text-[9px] font-heading text-[#FF6A00] animate-pulse bg-[#FF6A00]/10 px-1.5 py-0.5 rounded border border-[#FF6A00]/20">
+        <span className="text-[10px] font-heading text-[#FF6A00] animate-pulse bg-[#FF6A00]/10 px-2 py-1 rounded border border-[#FF6A00]/20">
           STREAM ACTIVE
         </span>
       </div>
 
-      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 relative p-4 space-y-3">
+      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 relative p-5 space-y-4">
         <AnimatePresence>
           {events.map((ev, i) => (
             <motion.div
@@ -130,18 +130,18 @@ export function UnifiedLiveTicker({
               whileHover={{ scale: 1.02, x: -4 }}
               className={`p-3 border-l-2 rounded-r-lg transition-all duration-200 ${getColorClasses(ev.color)}`}
             >
-              <div className="flex justify-between items-start mb-1">
-                <div className="flex items-center gap-2 text-[10px] font-sans font-bold tracking-widest uppercase">
+              <div className="flex justify-between items-start mb-2">
+                <div className="flex items-center gap-2 text-xs font-sans font-bold tracking-widest uppercase">
                   {getIcon(ev.type)}
                   {ev.title}
                 </div>
-                <span className="text-[9px] font-sans opacity-60 tracking-wider">{ev.timestamp}</span>
+                <span className="text-[10px] font-sans opacity-60 tracking-wider">{ev.timestamp}</span>
               </div>
-              <p className="text-xs font-sans text-white/80 mt-1 leading-relaxed">
+              <p className="text-sm font-sans text-white/80 mt-1 leading-relaxed">
                 {ev.description}
               </p>
               {ev.metric && (
-                <div className="mt-2 text-[10px] font-sans font-bold tracking-widest uppercase opacity-80">
+                <div className="mt-3 text-xs font-sans font-bold tracking-widest uppercase opacity-80">
                   [{ev.metric}]
                 </div>
               )}

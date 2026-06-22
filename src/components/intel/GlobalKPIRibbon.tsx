@@ -12,10 +12,10 @@ export function GlobalKPIRibbon({ stats, generatedAt }: { stats: any; generatedA
       {/* 1. Meta Volatility */}
       <div className="bg-[#0A0A0A] border border-white/5 p-4 rounded-lg flex items-center justify-between">
         <div>
-          <div className="text-[10px] font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
+          <div className="text-xs font-heading font-bold text-gray-500 tracking-widest uppercase mb-2">
             Meta Volatility
           </div>
-          <div className={`text-xl font-sans font-bold tracking-widest uppercase ${volatilityColor}`}>
+          <div className={`text-2xl font-sans font-bold tracking-widest uppercase ${volatilityColor}`}>
             {volatilityLevel}
           </div>
         </div>
@@ -29,11 +29,11 @@ export function GlobalKPIRibbon({ stats, generatedAt }: { stats: any; generatedA
       {/* 2. Active Intelligence */}
       <div className="bg-[#0A0A0A] border border-white/5 p-4 rounded-lg flex items-center justify-between">
         <div>
-          <div className="text-[10px] font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
+          <div className="text-xs font-heading font-bold text-gray-500 tracking-widest uppercase mb-2">
             Active Intelligence
           </div>
-          <div className="text-xl font-sans font-bold tracking-widest text-white uppercase flex items-baseline gap-1.5">
-            {stats.totalBuilds} <span className="text-[10px] text-gray-500 font-heading">BUILDS TRACKED</span>
+          <div className="text-2xl font-sans font-bold tracking-widest text-white uppercase flex items-baseline gap-2">
+            {stats.totalBuilds} <span className="text-xs text-gray-500 font-heading">BUILDS TRACKED</span>
           </div>
         </div>
         <div className="w-16 h-8">
@@ -46,11 +46,11 @@ export function GlobalKPIRibbon({ stats, generatedAt }: { stats: any; generatedA
       {/* 3. Omega Level Threats */}
       <div className="bg-[#0A0A0A] border border-white/5 p-4 rounded-lg flex items-center justify-between">
         <div>
-          <div className="text-[10px] font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
+          <div className="text-xs font-heading font-bold text-gray-500 tracking-widest uppercase mb-2">
             Omega Level Threats
           </div>
-          <div className="text-xl font-sans font-bold tracking-widest text-red-500 uppercase flex items-baseline gap-1.5">
-            {stats.omegaThreats} <span className="text-[10px] text-red-500/50 font-heading">DETECTED</span>
+          <div className="text-2xl font-sans font-bold tracking-widest text-red-500 uppercase flex items-baseline gap-2">
+            {stats.omegaThreats} <span className="text-xs text-red-500/50 font-heading">DETECTED</span>
           </div>
         </div>
         <div className="p-1.5 border border-red-500/20 rounded-md bg-red-500/5">
@@ -61,11 +61,11 @@ export function GlobalKPIRibbon({ stats, generatedAt }: { stats: any; generatedA
       {/* 4. System Status */}
       <div className="bg-[#0A0A0A] border border-white/5 p-4 rounded-lg flex items-center justify-between relative overflow-hidden">
         <div>
-          <div className="text-[10px] font-heading font-bold text-[#FF6A00] tracking-widest uppercase mb-1 flex items-center gap-1.5">
+          <div className="text-xs font-heading font-bold text-[#FF6A00] tracking-widest uppercase mb-2 flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-full bg-[#FF6A00] animate-pulse" />
             System Status
           </div>
-          <div className="text-[11px] font-sans font-bold tracking-widest text-[#FF6A00] uppercase mt-2 flex items-baseline gap-2">
+          <div className="text-sm font-sans font-bold tracking-widest text-[#FF6A00] uppercase mt-2 flex items-baseline gap-2">
             SYNCED <span className="text-white/60" suppressHydrationWarning>{new Date(generatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span>
           </div>
         </div>

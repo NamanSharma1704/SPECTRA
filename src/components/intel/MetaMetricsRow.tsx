@@ -10,21 +10,21 @@ export function MetaMetricsRow({ metrics }: { metrics: any }) {
       <div className="bg-[#0A0A0A] border border-white/5 p-5 rounded-lg flex flex-col justify-between group hover:border-white/10 transition-colors">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <div className="text-[10px] font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
+            <div className="text-xs font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
               Meta Velocity
             </div>
             <div className="flex items-center gap-2">
               {metrics.velocityTrend === "UP" ? (
-                <TrendingUp className="w-4 h-4 text-green-500" />
+                <TrendingUp className="w-5 h-5 text-green-500" />
               ) : (
-                <TrendingDown className="w-4 h-4 text-red-500" />
+                <TrendingDown className="w-5 h-5 text-red-500" />
               )}
-              <div className={`text-xl font-sans font-bold tracking-widest ${metrics.velocityTrend === "UP" ? "text-green-500" : "text-red-500"}`}>
+              <div className={`text-3xl font-sans font-bold tracking-widest ${metrics.velocityTrend === "UP" ? "text-green-500" : "text-red-500"}`}>
                 {metrics.velocityTrend === "UP" ? "+" : ""}{metrics.velocityPct}%
               </div>
             </div>
           </div>
-          <div className="text-[9px] font-sans text-gray-600 uppercase tracking-widest text-right">
+          <div className="text-[10px] font-sans text-gray-600 uppercase tracking-widest text-right">
             Last 7 Days
           </div>
         </div>
@@ -43,22 +43,22 @@ export function MetaMetricsRow({ metrics }: { metrics: any }) {
       <div className="bg-[#0A0A0A] border border-white/5 p-5 rounded-lg flex flex-col justify-between group hover:border-white/10 transition-colors">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <div className="text-[10px] font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
+            <div className="text-xs font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
               Patch Impact
             </div>
             <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-cyan-500" />
-              <div className="text-xl font-sans font-bold tracking-widest text-cyan-500">
+              <Zap className="w-5 h-5 text-cyan-500" />
+              <div className="text-3xl font-sans font-bold tracking-widest text-cyan-500">
                 {metrics.patchVersion}
               </div>
             </div>
           </div>
-          <div className="text-[9px] font-sans text-gray-600 uppercase tracking-widest text-right">
+          <div className="text-[10px] font-sans text-gray-600 uppercase tracking-widest text-right">
             (Recent)
           </div>
         </div>
         <div className="mt-2">
-          <div className="flex justify-between text-[10px] font-heading tracking-widest text-white/50 mb-1">
+          <div className="flex justify-between text-xs font-heading tracking-widest text-white/50 mb-1">
             <span>IMPACT</span>
             <span className="text-cyan-500 font-bold">{metrics.patchImpactLevel.toUpperCase()}</span>
           </div>
@@ -76,19 +76,19 @@ export function MetaMetricsRow({ metrics }: { metrics: any }) {
       <div className="bg-[#0A0A0A] border border-white/5 p-5 rounded-lg flex flex-col justify-between group hover:border-white/10 transition-colors">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <div className="text-[10px] font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
+            <div className="text-xs font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
               Trending Archetype
             </div>
             <div className="flex items-center gap-2">
-              <Target className="w-4 h-4 text-purple-500" />
-              <div className="text-xl font-sans font-bold tracking-widest text-purple-500 uppercase truncate max-w-[120px]">
+              <Target className="w-5 h-5 text-purple-500" />
+              <div className="text-3xl font-sans font-bold tracking-widest text-purple-500 uppercase truncate max-w-[150px]">
                 {metrics.topArchetype}
               </div>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-4 mt-2">
-          <div className="relative w-10 h-10 flex-shrink-0">
+          <div className="relative w-12 h-12 flex-shrink-0">
             <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90">
               <path
                 className="text-white/5"
@@ -108,8 +108,8 @@ export function MetaMetricsRow({ metrics }: { metrics: any }) {
             </svg>
           </div>
           <div>
-            <div className="text-sm font-sans font-bold text-white">{metrics.topArchetypePct}%</div>
-            <div className="text-[9px] font-heading text-gray-600 uppercase tracking-widest">Usage</div>
+            <div className="text-lg font-sans font-bold text-white">{metrics.topArchetypePct}%</div>
+            <div className="text-[10px] font-heading text-gray-600 uppercase tracking-widest">Usage</div>
           </div>
         </div>
       </div>
@@ -118,19 +118,19 @@ export function MetaMetricsRow({ metrics }: { metrics: any }) {
       <div className="bg-[#0A0A0A] border border-white/5 p-5 rounded-lg flex flex-col justify-between group hover:border-white/10 transition-colors">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <div className="text-[10px] font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
+            <div className="text-xs font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
               Average Trust Score
             </div>
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-blue-500" />
-              <div className="text-xl font-sans font-bold tracking-widest text-blue-500">
+              <ShieldCheck className="w-5 h-5 text-blue-500" />
+              <div className="text-3xl font-sans font-bold tracking-widest text-blue-500">
                 {metrics.avgTrustScore}
               </div>
             </div>
           </div>
         </div>
         <div className="mt-2">
-          <div className="text-[9px] font-sans text-gray-600 uppercase tracking-widest text-right mb-2">
+          <div className="text-[10px] font-sans text-gray-600 uppercase tracking-widest text-right mb-2">
             Across Analysts
           </div>
           <div className="w-full h-1.5 bg-black rounded-full overflow-hidden flex gap-0.5 relative">

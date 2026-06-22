@@ -55,10 +55,10 @@ export function TopActivityBuilds({ entries }: { entries: TopActivityEntry[] }) 
               
               {/* Header */}
               <div className="mb-4">
-                <div className={`text-[10px] font-heading font-bold tracking-widest uppercase ${accent}`}>
+                <div className={`text-xs font-heading font-bold tracking-widest uppercase ${accent}`}>
                   {activity.type.replace("_", " ")}
                 </div>
-                <div className="text-[11px] font-sans text-gray-400 line-clamp-1 uppercase tracking-wider">
+                <div className="text-xs font-sans text-gray-400 line-clamp-1 uppercase tracking-wider mt-1">
                   {activity.name}
                 </div>
               </div>
@@ -66,45 +66,45 @@ export function TopActivityBuilds({ entries }: { entries: TopActivityEntry[] }) 
               {top.status === "AVAILABLE" && top.build && top.score !== undefined ? (
                 <>
                   {/* Meta Score & Stage */}
-                  <div className="flex flex-wrap items-end justify-between gap-1 mb-6">
+                  <div className="flex flex-col 2xl:flex-row items-start 2xl:items-end justify-between gap-3 mb-6">
                     <div>
-                      <div className="text-[10px] font-heading text-gray-500 tracking-widest uppercase mb-1">
+                      <div className="text-xs font-heading text-gray-500 tracking-widest uppercase mb-1">
                         Meta Score
                       </div>
-                      <div className={`text-3xl font-sans font-bold tracking-widest ${accent}`}>
+                      <div className={`text-4xl font-sans font-bold tracking-widest ${accent}`}>
                         {Math.round(top.score)}
                       </div>
                     </div>
-                    <div className={`px-1.5 py-0.5 text-[8px] font-heading font-bold uppercase tracking-wider border rounded bg-opacity-10 mb-1 ${accent} border-current shrink-0`}>
+                    <div className={`px-2.5 py-1 text-[10px] font-heading font-bold uppercase tracking-widest border rounded bg-opacity-10 mb-1 ${accent} border-current shrink-0`}>
                       {top.score > 90 ? "DOMINANT" : top.score > 75 ? "ESTABLISHED" : "VOLATILE"}
                     </div>
                   </div>
 
                   {/* Signals */}
-                  <div className="space-y-3 pt-4 border-t border-white/5">
+                  <div className="space-y-4 pt-5 border-t border-white/5">
                     <div>
-                      <div className="text-[9px] font-heading text-gray-500 tracking-widest uppercase mb-0.5">
+                      <div className="text-xs font-heading text-gray-500 tracking-widest uppercase mb-1">
                         Top Signal
                       </div>
-                      <Link href={`/builds/${top.build.id}`} className="text-xs font-sans text-white hover:underline line-clamp-1">
+                      <Link href={`/builds/${top.build.id}`} className="text-sm font-sans text-white hover:underline line-clamp-1">
                         {top.build.name}
                       </Link>
                     </div>
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-[9px] font-heading text-gray-500 tracking-widest uppercase mb-0.5">
+                        <div className="text-[10px] font-heading text-gray-500 tracking-widest uppercase mb-1">
                           Analyst
                         </div>
-                        <div className="text-[11px] font-sans text-gray-300 truncate max-w-[80px]">
+                        <div className="text-xs font-sans text-gray-300 truncate max-w-[80px]">
                           {top.build.creators?.name ?? "UNKNOWN"}
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-[9px] font-heading text-gray-500 tracking-widest uppercase mb-0.5">
+                        <div className="text-[10px] font-heading text-gray-500 tracking-widest uppercase mb-1">
                           Confidence
                         </div>
-                        <div className={`text-[11px] font-sans tracking-[0.2em] ${confScore > 3 ? "text-green-500" : "text-yellow-500"}`}>
+                        <div className={`text-xs tracking-[0.2em] ${confScore > 3 ? "text-green-500" : "text-yellow-500"}`}>
                           {dots}
                         </div>
                       </div>
