@@ -24,17 +24,21 @@ export default async function WeaponMetaPage({ params }: { params: Promise<{ slu
     .order("published_at", { ascending: false })
     .limit(20);
 
-  if (error || !videos || videos.length === 0) {
-    notFound();
+  if (error) {
+    console.error(error);
   }
 
-  // Derive display name from the first video
-  const displayName = videos[0].content_tags.weapons.find((w: any) => w.slug === slug)?.displayName || slug.toUpperCase();
+  const hasVideos = videos && videos.length > 0;
+  const displayName = hasVideos
+    ? videos[0].content_tags?.weapons?.find((w: any) => w.slug === slug)?.displayName 
+      || videos[0].content_tags?.exotic_weapon?.find((w: any) => w.slug === slug)?.displayName 
+      || slug.toUpperCase()
+    : slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
-  const formattedVideos = videos.map((v: any) => ({
+  const formattedVideos = hasVideos ? videos.map((v: any) => ({
     ...v,
     creator: v.creators?.name || "Unknown"
-  }));
+  })) : [];
 
   const trending = await TrendingService.getTrending(14);
   const consensusData = trending.trendingWeapons.find((w: any) => w.slug === slug);
