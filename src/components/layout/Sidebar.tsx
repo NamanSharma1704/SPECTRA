@@ -10,9 +10,8 @@ import {
 import { AnimatedLogo } from "./AnimatedLogo";
 
 const NAV_ITEMS = [
-  { name: "Gearsets",           href: "/gearset",  icon: Shield },
+  { name: "Meta & Gearsets",    href: "/meta",     icon: Crosshair },
   { name: "Intelligence",       href: "/intel",    icon: Radio },
-  { name: "Meta Leaderboard",   href: "/meta",     icon: Crosshair },
   { name: "Meta Forecasts",     href: "/forecast", icon: Target },
   { name: "Accuracy Dashboard", href: "/forecasts/dashboard", icon: Target },
   { name: "Creators",           href: "/creators", icon: Users },

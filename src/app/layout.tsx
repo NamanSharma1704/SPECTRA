@@ -1,18 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Inter, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import { FaviconAnimator } from "@/components/layout/FaviconAnimator";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const robotoMono = Roboto_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-});
 
 const equinox = localFont({
   src: [
@@ -48,7 +37,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${robotoMono.variable} ${equinox.variable} ${deltha.variable} h-full antialiased dark`}
+      className={`${equinox.variable} ${deltha.variable} dark`}
+      style={{ colorScheme: "dark" }}
     >
       <body className={`min-h-full flex flex-col bg-background font-sans`}>
         <FaviconAnimator />
