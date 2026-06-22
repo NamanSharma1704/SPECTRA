@@ -1,7 +1,11 @@
 // Internal REST API SDK for Frontend Components
 
 export class DIPClient {
-  private static baseUrl = typeof window === 'undefined' ? 'http://localhost:3000/api/v1' : '/api/v1';
+  private static get baseUrl() {
+    if (typeof window !== 'undefined') return '/api/v1';
+    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}/api/v1`;
+    return 'http://localhost:3000/api/v1';
+  }
 
   /**
    * Fetches the complete unified item taxonomy (Weapons, Brands, Gear)
