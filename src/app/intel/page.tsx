@@ -1,15 +1,11 @@
-import { notFound } from "next/navigation";
 import { IntelligenceService } from "@/server/services/IntelligenceService";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { CommandCenterHero } from "@/components/intel/CommandCenterHero";
-import { MetaAlertsFeed } from "@/components/intel/MetaAlertsFeed";
-import { ConsensusAlerts } from "@/components/intel/ConsensusAlerts";
-import { CreatorSignalFeed } from "@/components/intel/CreatorSignalFeed";
-import { EmergingBuildsPanel } from "@/components/intel/EmergingBuildsPanel";
+import { GlobalKPIRibbon } from "@/components/intel/GlobalKPIRibbon";
+import { UnifiedLiveTicker } from "@/components/intel/UnifiedLiveTicker";
 import { TopActivityBuilds } from "@/components/intel/TopActivityBuilds";
-import { TopForecastersPanel } from "@/components/intel/TopForecastersPanel";
-import { CategorizedVideoFeed } from "@/components/intel/CategorizedVideoFeed";
 import { WinnersVsLosersPanel } from "@/components/intel/WinnersVsLosersPanel";
+import { TopForecastersPanel } from "@/components/intel/TopForecastersPanel";
+import { MediaVault } from "@/components/intel/MediaVault";
 
 export const dynamic = "force-dynamic";
 
@@ -23,8 +19,6 @@ export default async function IntelPage() {
   try {
     intel = await IntelligenceService.getDashboardIntel();
   } catch (err: any) {
-    // Only use notFound for genuine "no data" scenarios; re-throw other errors
-    // so Next.js renders the error boundary instead of a misleading 404
     throw new Error(`Failed to load intelligence briefing: ${err?.message ?? "Unknown error"}`);
   }
 
@@ -43,88 +37,54 @@ export default async function IntelPage() {
 
   return (
     <AppLayout>
-      <div className="text-gray-200 font-sans max-w-[1600px] mx-auto">
+      <div className="text-gray-200 max-w-[1800px] mx-auto pb-20">
         
-        {/* 1. Command Center Hero */}
-        <CommandCenterHero generatedAt={generatedAt} stats={stats} />
+        {/* Top Ribbon */}
+        <GlobalKPIRibbon stats={stats} generatedAt={generatedAt} />
 
-        {/* 2. Primary Spotlight Data */}
-        <div className="mb-10">
-          <TopActivityBuilds entries={topPerActivity} />
-        </div>
-
-        {/* 3. Asymmetrical Data Flow (Left Stream / Right Spotlight) */}
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 mb-12">
+        {/* Dense Bento Grid Layout */}
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 h-auto xl:h-[800px]">
           
-          {/* LEFT: Intelligence Stream */}
-          <div className="xl:col-span-8 flex flex-col gap-8">
-            <div className="glass-card p-6 border-white/5">
-              <div className="text-[10px] font-sans font-bold text-gray-500 uppercase tracking-widest mb-6 px-2">
-                Live Data Stream
-              </div>
-              <div className="flex flex-col gap-10">
-                <MetaAlertsFeed alerts={metaAlerts} />
-                <div className="h-px bg-white/5 w-full" />
-                <EmergingBuildsPanel builds={emergingBuilds} />
-              </div>
-            </div>
-
-            {/* Winners / Losers Impact Panel Spotlight */}
-            <div className="glass-card p-6 border-white/5">
-              <div className="text-[10px] font-sans font-bold text-gray-500 uppercase tracking-widest mb-6 px-2">
-                Patch Impact Analysis
-              </div>
-              <WinnersVsLosersPanel winners={patchImpact.winners} losers={patchImpact.losers} />
-            </div>
-          </div>
-
-          {/* RIGHT: Analytical Sidebar */}
-          <aside className="xl:col-span-4 flex flex-col gap-6">
+          {/* Main Analytics Arena (Left/Center) */}
+          <div className="xl:col-span-8 flex flex-col gap-6 h-full">
             
-            {/* Independent Agreement */}
-            <div className="glass-card p-6 border-white/5">
-               <ConsensusAlerts alerts={consensusAlerts} />
+            {/* Top Builds Spotlight (Takes up top half of center area) */}
+            <div className="bg-[#050505]/80 backdrop-blur-md border border-white/5 rounded-xl shadow-[inset_0_0_20px_rgba(255,106,0,0.02)] overflow-hidden flex-none">
+               <TopActivityBuilds entries={topPerActivity} />
             </div>
 
-            {/* Creator Signals */}
-            <div className="glass-card p-6 border-white/5">
-               <CreatorSignalFeed signals={creatorSignals} />
-            </div>
-
-            {/* Top Forecasters */}
-            <div className="glass-card p-6 border-white/5">
-               <TopForecastersPanel forecasters={topForecasters} />
-            </div>
-
-            {/* Broadcast */}
-            <div className="border border-primary/20 bg-primary/5 p-4 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-primary via-primary/50 to-transparent" />
-              <div className="text-[9px] font-mono text-primary/60 tracking-widest mb-2">
-                // ISAC BROADCAST
+            {/* Sub-panels Grid (Takes up bottom half) */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-1 min-h-[300px]">
+              
+              {/* Patch Impact Visualizer */}
+              <div className="bg-[#050505]/80 backdrop-blur-md border border-white/5 p-6 rounded-xl shadow-[inset_0_0_20px_rgba(255,106,0,0.02)] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10">
+                <div className="text-[10px] font-sans font-bold text-gray-500 uppercase tracking-widest mb-6 px-2">
+                  Patch Volatility Impact
+                </div>
+                <WinnersVsLosersPanel winners={patchImpact.winners} losers={patchImpact.losers} />
               </div>
-              <p className="text-xs font-mono text-gray-400 leading-relaxed">
-                The meta is shifting. Striker-class builds continue to dominate endgame content. 
-                Monitor Heartbreaker variants — developer commentary suggests a balance review 
-                in the next Title Update.
-              </p>
-              <div className="mt-3 text-[9px] font-mono text-gray-700">
-                SIGNAL ORIGIN: SHD COMMAND // PRIORITY: HIGH
+
+              {/* Forecasters / Leaderboards */}
+              <div className="bg-[#050505]/80 backdrop-blur-md border border-white/5 p-6 rounded-xl shadow-[inset_0_0_20px_rgba(255,106,0,0.02)] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10">
+                 <TopForecastersPanel forecasters={topForecasters} />
               </div>
+
             </div>
-          </aside>
+          </div>
+
+          {/* Unified Live Ticker (Right Sidebar) */}
+          <div className="xl:col-span-4 h-full min-h-[500px]">
+            <UnifiedLiveTicker 
+              metaAlerts={metaAlerts} 
+              consensusAlerts={consensusAlerts} 
+              creatorSignals={creatorSignals} 
+            />
+          </div>
+
         </div>
 
-        {/* 4. Deep Integrations (Video Feeds Carousel) */}
-        <div className="glass-card p-8 border-white/5 mb-20">
-          <div className="text-[10px] font-sans font-bold text-gray-500 uppercase tracking-widest mb-6">
-            Global Media Intercepts
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <CategorizedVideoFeed title="LATEST PVP INTEL" videos={intelFeeds?.pvpVideos} color="cyan" />
-            <CategorizedVideoFeed title="LATEST FARMING GUIDES" videos={intelFeeds?.farmingGuides} color="primary" />
-            <CategorizedVideoFeed title="LATEST PATCH VIDEOS" videos={intelFeeds?.patchVideos} color="purple" />
-          </div>
-        </div>
+        {/* Hidden Media Vault */}
+        <MediaVault intelFeeds={intelFeeds} />
 
       </div>
     </AppLayout>
