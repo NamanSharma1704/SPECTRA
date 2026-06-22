@@ -14,8 +14,8 @@ export async function POST(req: Request) {
     
     // Auto-commit everything to avoid dev server memory separation issues
     const { getStagingQueue } = await import("@/server/ingestion/IngestionService");
-    const queue = getStagingQueue();
-    const pending = queue.filter(b => b.status === "PENDING");
+    const queue = await getStagingQueue();
+    const pending = queue.filter(b => b.status === "PENDING" || b.status === "ERROR");
     let count = 0;
     const errors: any[] = [];
     for (const b of pending) {
@@ -40,8 +40,8 @@ export async function POST(req: Request) {
 
   if (action === "commit_all") {
     const { getStagingQueue } = await import("@/server/ingestion/IngestionService");
-    const queue = getStagingQueue();
-    const pending = queue.filter(b => b.status === "PENDING" && b.verificationStatus !== "Filtered");
+    const queue = await getStagingQueue();
+    const pending = queue.filter(b => (b.status === "PENDING" || b.status === "ERROR") && b.verificationStatus !== "Filtered");
     let count = 0;
     for (const b of pending) {
       if (await commitBuild(b.id)) count++;
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
   }
 
   if (action === "reject" && buildId) {
-    const ok = rejectBuild(buildId);
+    const ok = await rejectBuild(buildId);
     return NextResponse.json({ success: ok });
   }
 
