@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Inter, Roboto_Mono } from "next/font/google";
 import "./globals.css";
+import { FaviconAnimator } from "@/components/layout/FaviconAnimator";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -50,6 +51,7 @@ export default function RootLayout({
       className={`${inter.variable} ${robotoMono.variable} ${equinox.variable} ${deltha.variable} h-full antialiased dark`}
     >
       <body className={`min-h-full flex flex-col bg-background font-sans`}>
+        <FaviconAnimator />
         {children}
       </body>
     </html>
