@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { DIPClient } from "@/client/sdk";
+import { IntelligenceService } from "@/server/services/IntelligenceService";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { CommandCenterHero } from "@/components/intel/CommandCenterHero";
 import { MetaAlertsFeed } from "@/components/intel/MetaAlertsFeed";
@@ -21,21 +21,10 @@ export const metadata = {
 
 export default async function IntelPage() {
   let intel: any;
-  let errorMsg = null;
   try {
-    intel = await DIPClient.getIntel();
+    intel = await IntelligenceService.getDashboardIntel();
   } catch (err: any) {
-    errorMsg = err.message || err.toString();
-  }
-
-  if (errorMsg || !intel) {
-    return (
-      <div className="p-10 text-red-500 font-mono">
-        <h1>INTEL DASHBOARD CRASHED</h1>
-        <p>Error: {errorMsg}</p>
-        <p>Base URL used by SDK: {process.env.VERCEL_URL}</p>
-      </div>
-    );
+    notFound();
   }
 
   const {
