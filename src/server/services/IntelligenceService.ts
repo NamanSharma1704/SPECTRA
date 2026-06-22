@@ -74,7 +74,7 @@ export class IntelligenceService {
       TrustService.getTopForecasters(5)
     ]);
 
-    return {
+    const result = {
       success: true,
       generatedAt: new Date().toISOString(),
       metaAlerts: risingBuilds.map((b, i) => ({
@@ -124,13 +124,33 @@ export class IntelligenceService {
         pvpVideos: pvpVideosRes.data?.map((v: any) => ({...v, creator: (v.creators as any)?.name})) ?? [],
         farmingGuides: farmingVideosRes.data?.map((v: any) => ({...v, creator: (v.creators as any)?.name})) ?? [],
       },
+      metaMetrics: {
+        velocityPct: patchImpactRaw.fastestGrowing[0]?.growthPercent ?? 0,
+        velocityTrend: patchImpactRaw.fastestGrowing[0]?.growthPercent > 0 ? "UP" : "DOWN",
+        patchVersion: "TU22.3",
+        patchImpactLevel: patchImpactRaw.mostDecreased.length > 2 ? "High Impact" : "Stable",
+        topArchetype: "Striker DPS",
+        topArchetypePct: 0,
+        avgTrustScore: topForecasters.length > 0 ? Math.round(topForecasters.reduce((acc: number, f: any) => acc + (f.trustScoreState.trustScore || 0), 0) / topForecasters.filter((f: any) => f.trustScoreState.status === "AVAILABLE").length) : 0
+      },
       stats: {
         totalBuilds: builds.length,
-        totalActivities: activities.length,
-        omegaThreats: builds.filter((b) =>
-          (b.build_activity_scores as any[])?.some((s: any) => s.threat_level === "OMEGA")
-        ).length,
-      },
+        omegaThreats: builds.filter((b) => (b.build_activity_scores as any[])?.some((s: any) => s.threat_level === "OMEGA")).length,
+      }
     };
+
+    const archetypeCounts: Record<string, number> = {};
+    builds.forEach((b) => {
+      if (b.archetype) {
+        archetypeCounts[b.archetype] = (archetypeCounts[b.archetype] || 0) + 1;
+      }
+    });
+    const topArch = Object.entries(archetypeCounts).sort((a, b) => b[1] - a[1])[0];
+    if (topArch) {
+      result.metaMetrics.topArchetype = topArch[0];
+      result.metaMetrics.topArchetypePct = Math.round((topArch[1] / builds.length) * 100 * 10) / 10;
+    }
+
+    return result;
   }
 }

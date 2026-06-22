@@ -15,48 +15,50 @@ export function TopForecastersPanel({ forecasters }: { forecasters: Forecaster[]
   if (!forecasters || forecasters.length === 0) return null;
 
   return (
-    <div className="border border-green-900/30 bg-black/40">
-      <div className="bg-green-950/20 p-4 border-b border-green-900/30 flex items-center justify-between">
+    <div className="bg-[#0A0A0A] border border-white/5 rounded-lg flex flex-col h-full">
+      <div className="p-4 border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Target className="w-4 h-4 text-green-500" />
-          <h2 className="text-sm font-mono font-bold text-green-500 tracking-widest uppercase">
-            Top Forecasters
+          <Target className="w-4 h-4 text-blue-500" />
+          <h2 className="text-[11px] font-heading font-bold text-white tracking-widest uppercase">
+            Top Analysts
           </h2>
         </div>
-        <div className="text-[10px] font-mono text-green-500/50 uppercase tracking-widest">
+        <div className="text-[9px] font-sans text-gray-500 uppercase tracking-widest">
           Accuracy Leaderboard
         </div>
       </div>
 
-      <div className="divide-y divide-gray-900">
+      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 divide-y divide-white/5">
         {forecasters.map((f, i) => (
-          <div key={f.id} className="p-4 flex items-center gap-4 hover:bg-gray-900/30 transition-colors">
-            <div className="text-green-500 font-black font-mono text-xl opacity-50 w-6">#{i + 1}</div>
+          <div key={f.id} className="p-4 flex items-center gap-4 hover:bg-white/[0.02] transition-colors">
+            <div className="text-gray-600 font-heading text-lg opacity-50 w-4">#{i + 1}</div>
             <div className="flex-1">
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-sm font-bold text-gray-200">{f.name}</span>
-                {f.isVerified && <CheckCircle2 className="w-3 h-3 text-blue-400" />}
-                <span className={`text-[10px] font-mono px-1.5 py-0.5 ${
-                  f.trustTier === "ELITE" ? "bg-green-500/20 text-green-400 border border-green-500/30" :
-                  f.trustTier === "HIGH" ? "bg-blue-500/20 text-blue-400 border border-blue-500/30" :
-                  "bg-gray-800 text-gray-400"
-                }`}>{f.trustTier}</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="font-sans text-sm font-bold text-gray-200">{f.name}</span>
+                  {f.isVerified && <CheckCircle2 className="w-3 h-3 text-blue-400" />}
+                </div>
+                <div className={`text-[9px] font-heading px-1.5 py-0.5 rounded border ${
+                  f.trustTier === "ELITE" ? "bg-green-500/10 text-green-500 border-green-500/20" :
+                  f.trustTier === "HIGH" ? "bg-blue-500/10 text-blue-500 border-blue-500/20" :
+                  "bg-white/5 text-gray-400 border-white/10"
+                }`}>{f.trustTier}</div>
               </div>
               <div className="flex items-center gap-4 mt-2">
                 <div>
-                  <div className="text-[10px] font-mono text-gray-500 uppercase tracking-wider">Accuracy</div>
-                  <div className="font-mono text-sm text-green-400">
-                    {f.hybridAccuracyState.status === "AVAILABLE" ? `${f.hybridAccuracyState.accuracy}%` : f.hybridAccuracyState.status === "INSUFFICIENT_EVIDENCE" ? "NEEDS DATA" : "NO DATA"}
+                  <div className="text-[9px] font-heading text-gray-500 uppercase tracking-widest">Accuracy</div>
+                  <div className={`font-sans text-xs font-bold ${f.hybridAccuracyState.status === "AVAILABLE" && f.hybridAccuracyState.accuracy > 70 ? 'text-green-500' : 'text-gray-300'}`}>
+                    {f.hybridAccuracyState.status === "AVAILABLE" ? `${f.hybridAccuracyState.accuracy}%` : "---"}
                   </div>
                 </div>
                 <div>
-                  <div className="text-[10px] font-mono text-gray-500 uppercase tracking-wider">Successes</div>
-                  <div className="font-mono text-sm text-gray-300">{f.successfulCalls} calls</div>
+                  <div className="text-[9px] font-heading text-gray-500 uppercase tracking-widest">Successes</div>
+                  <div className="font-sans text-xs font-bold text-gray-300">{f.successfulCalls}</div>
                 </div>
                 <div>
-                  <div className="text-[10px] font-mono text-gray-500 uppercase tracking-wider">Lead Time</div>
-                  <div className="font-mono text-sm text-cyan-400">
-                    {f.avgLeadTimeState.status === "AVAILABLE" ? `${f.avgLeadTimeState.leadTime} days` : "NO DATA"}
+                  <div className="text-[9px] font-heading text-gray-500 uppercase tracking-widest">Score</div>
+                  <div className="font-sans text-xs font-bold text-blue-500">
+                    {f.trustScoreState.status === "AVAILABLE" ? f.trustScoreState.trustScore : "---"}
                   </div>
                 </div>
               </div>
@@ -64,6 +66,9 @@ export function TopForecastersPanel({ forecasters }: { forecasters: Forecaster[]
           </div>
         ))}
       </div>
+      <button className="w-full p-3 text-center text-[10px] font-heading text-gray-500 tracking-widest uppercase border-t border-white/5 hover:bg-white/5 hover:text-white transition-colors">
+        VIEW FULL LEADERBOARD
+      </button>
     </div>
   );
 }

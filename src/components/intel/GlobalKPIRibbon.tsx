@@ -1,66 +1,75 @@
-import { Activity, ShieldAlert, Crosshair, TrendingUp } from "lucide-react";
+import { ShieldAlert, RefreshCcw } from "lucide-react";
 
 export function GlobalKPIRibbon({ stats, generatedAt }: { stats: any; generatedAt: string }) {
-  // Mock Volatility calculation based on total builds
   const volatilityScore = Math.min(100, Math.round(stats.totalBuilds / 2.5));
   const volatilityLevel = volatilityScore > 80 ? "HIGH" : volatilityScore > 50 ? "MODERATE" : "STABLE";
-  const volatilityColor = volatilityLevel === "HIGH" ? "text-rose-500" : volatilityLevel === "MODERATE" ? "text-[#FF6A00]" : "text-emerald-500";
+  const volatilityColor = volatilityLevel === "HIGH" ? "text-red-500" : volatilityLevel === "MODERATE" ? "text-[#FF6A00]" : "text-green-500";
+  const volatilityStroke = volatilityLevel === "HIGH" ? "#EF4444" : volatilityLevel === "MODERATE" ? "#FF6A00" : "#22C55E";
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       
-      {/* KPI 1 */}
-      <div className="bg-[#050505]/80 backdrop-blur-md border border-white/5 p-4 flex items-center justify-between rounded-lg shadow-[inset_0_0_20px_rgba(255,106,0,0.02)] transition-colors hover:border-[#FF6A00]/30">
+      {/* 1. Meta Volatility */}
+      <div className="bg-[#0A0A0A] border border-white/5 p-4 rounded-lg flex items-center justify-between">
         <div>
-          <div className="text-[10px] font-sans font-bold text-gray-500 tracking-widest uppercase mb-1">
+          <div className="text-[10px] font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
             Meta Volatility
           </div>
-          <div className={`text-2xl font-heading tracking-wider ${volatilityColor}`}>
+          <div className={`text-xl font-sans font-bold tracking-widest uppercase ${volatilityColor}`}>
             {volatilityLevel}
           </div>
         </div>
-        <TrendingUp className={`w-8 h-8 opacity-20 ${volatilityColor}`} />
+        <div className="w-20 h-8">
+          <svg viewBox="0 0 100 30" className="w-full h-full opacity-60">
+            <polyline fill="none" stroke={volatilityStroke} strokeWidth="1.5" points="0,25 20,20 40,28 60,10 80,15 100,5" />
+          </svg>
+        </div>
       </div>
 
-      {/* KPI 2 */}
-      <div className="bg-[#050505]/80 backdrop-blur-md border border-white/5 p-4 flex items-center justify-between rounded-lg shadow-[inset_0_0_20px_rgba(255,106,0,0.02)] transition-colors hover:border-[#FF6A00]/30">
+      {/* 2. Active Intelligence */}
+      <div className="bg-[#0A0A0A] border border-white/5 p-4 rounded-lg flex items-center justify-between">
         <div>
-          <div className="text-[10px] font-sans font-bold text-gray-500 tracking-widest uppercase mb-1">
+          <div className="text-[10px] font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
             Active Intelligence
           </div>
-          <div className="text-2xl font-heading tracking-wider text-white">
-            {stats.totalBuilds} <span className="text-sm text-gray-500 tracking-normal">BUILDS</span>
+          <div className="text-xl font-sans font-bold tracking-widest text-white uppercase flex items-baseline gap-1.5">
+            {stats.totalBuilds} <span className="text-[10px] text-gray-500 font-heading">BUILDS TRACKED</span>
           </div>
         </div>
-        <Activity className="w-8 h-8 text-white opacity-20" />
+        <div className="w-16 h-8">
+          <svg viewBox="0 0 100 30" className="w-full h-full opacity-30">
+            <polyline fill="none" stroke="#FFFFFF" strokeWidth="1.5" points="0,15 20,15 30,5 40,25 50,15 100,15" />
+          </svg>
+        </div>
       </div>
 
-      {/* KPI 3 */}
-      <div className="bg-[#050505]/80 backdrop-blur-md border border-white/5 p-4 flex items-center justify-between rounded-lg shadow-[inset_0_0_20px_rgba(255,106,0,0.02)] transition-colors hover:border-[#FF6A00]/30">
+      {/* 3. Omega Level Threats */}
+      <div className="bg-[#0A0A0A] border border-white/5 p-4 rounded-lg flex items-center justify-between">
         <div>
-          <div className="text-[10px] font-sans font-bold text-gray-500 tracking-widest uppercase mb-1">
+          <div className="text-[10px] font-heading font-bold text-gray-500 tracking-widest uppercase mb-1">
             Omega Level Threats
           </div>
-          <div className="text-2xl font-heading tracking-wider text-rose-500">
-            {stats.omegaThreats} <span className="text-sm text-rose-500/50 tracking-normal">DETECTED</span>
+          <div className="text-xl font-sans font-bold tracking-widest text-red-500 uppercase flex items-baseline gap-1.5">
+            {stats.omegaThreats} <span className="text-[10px] text-red-500/50 font-heading">DETECTED</span>
           </div>
         </div>
-        <ShieldAlert className="w-8 h-8 text-rose-500 opacity-20" />
+        <div className="p-1.5 border border-red-500/20 rounded-md bg-red-500/5">
+          <ShieldAlert className="w-5 h-5 text-red-500" />
+        </div>
       </div>
 
-      {/* KPI 4 */}
-      <div className="bg-[#050505]/80 backdrop-blur-md border border-[#FF6A00]/20 p-4 flex items-center justify-between rounded-lg shadow-[inset_0_0_20px_rgba(255,106,0,0.05)] relative overflow-hidden transition-colors hover:border-[#FF6A00]/50">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF6A00]/10 rounded-full blur-2xl -mr-10 -mt-10" />
-        <div className="relative z-10">
-          <div className="text-[10px] font-sans font-bold text-[#FF6A00] tracking-widest uppercase mb-1 flex items-center gap-2">
+      {/* 4. System Status */}
+      <div className="bg-[#0A0A0A] border border-white/5 p-4 rounded-lg flex items-center justify-between relative overflow-hidden">
+        <div>
+          <div className="text-[10px] font-heading font-bold text-[#FF6A00] tracking-widest uppercase mb-1 flex items-center gap-1.5">
             <div className="w-1.5 h-1.5 rounded-full bg-[#FF6A00] animate-pulse" />
             System Status
           </div>
-          <div className="text-[11px] font-sans text-[#FF6A00]/80 uppercase mt-2">
-            SYNC: {new Date(generatedAt).toLocaleTimeString()}
+          <div className="text-[11px] font-sans font-bold tracking-widest text-[#FF6A00] uppercase mt-2 flex items-baseline gap-2">
+            SYNCED <span className="text-white/60">{new Date(generatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span>
           </div>
         </div>
-        <Crosshair className="w-8 h-8 text-[#FF6A00] opacity-30 relative z-10 animate-spin-slow" />
+        <RefreshCcw className="w-6 h-6 text-[#FF6A00] opacity-40 animate-spin-slow" />
       </div>
 
     </div>

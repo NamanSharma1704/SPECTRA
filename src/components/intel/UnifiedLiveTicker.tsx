@@ -10,7 +10,7 @@ export interface TickerEvent {
   description: string;
   metric?: string | number;
   timestamp: string;
-  color: "primary" | "purple" | "emerald" | "rose" | "gray";
+  color: "primary" | "purple" | "emerald" | "rose" | "gray" | "cyan";
 }
 
 export function UnifiedLiveTicker({
@@ -62,7 +62,7 @@ export function UnifiedLiveTicker({
         description: `${c.name} logged ${c.buildCount} new builds. Top: ${c.topBuild}`,
         metric: `AVG: ${Math.round(c.avgScore)}`,
         timestamp: `${i * 4 + 4}m AGO`,
-        color: "gray",
+        color: "cyan",
       });
     });
 
@@ -88,11 +88,12 @@ export function UnifiedLiveTicker({
 
   const getColorClasses = (color: string) => {
     switch (color) {
-      case "primary": return "border-[#FF6A00]/40 text-[#FF6A00] bg-[#FF6A00]/5";
-      case "purple": return "border-purple-500/40 text-purple-400 bg-purple-500/5";
-      case "emerald": return "border-emerald-500/40 text-emerald-400 bg-emerald-500/5";
-      case "rose": return "border-rose-500/40 text-rose-400 bg-rose-500/5";
-      default: return "border-gray-600/40 text-gray-300 bg-gray-800/20";
+      case "primary": return "border-l-[3px] border-[#FF6A00] text-[#FF6A00] bg-[#FF6A00]/[0.02]";
+      case "purple": return "border-l-[3px] border-purple-500 text-purple-400 bg-purple-500/[0.02]";
+      case "emerald": return "border-l-[3px] border-green-500 text-green-400 bg-green-500/[0.02]";
+      case "rose": return "border-l-[3px] border-red-500 text-red-400 bg-red-500/[0.02]";
+      case "cyan": return "border-l-[3px] border-cyan-500 text-cyan-400 bg-cyan-500/[0.02]";
+      default: return "border-l-[3px] border-gray-600 text-gray-300 bg-white/[0.02]";
     }
   };
 
@@ -107,18 +108,18 @@ export function UnifiedLiveTicker({
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#050505]/80 backdrop-blur-md border border-white/5 p-4 rounded-xl shadow-[inset_0_0_20px_rgba(255,106,0,0.02)] overflow-hidden">
-      <div className="flex items-center justify-between mb-6 pb-2 border-b border-white/5">
-        <h3 className="font-heading text-lg font-bold tracking-widest text-white uppercase flex items-center gap-2">
+    <div className="flex flex-col h-full bg-[#0A0A0A] border border-white/5 rounded-lg overflow-hidden">
+      <div className="flex items-center justify-between p-4 border-b border-white/5">
+        <h3 className="font-heading text-[11px] font-bold tracking-widest text-white uppercase flex items-center gap-2">
           <Radio className="w-4 h-4 text-[#FF6A00] animate-pulse" />
-          Live Intelligence
+          Live Intelligence Feed
         </h3>
-        <span className="text-[10px] font-sans text-[#FF6A00] animate-pulse bg-[#FF6A00]/10 px-2 py-0.5 rounded">
+        <span className="text-[9px] font-heading text-[#FF6A00] animate-pulse bg-[#FF6A00]/10 px-1.5 py-0.5 rounded border border-[#FF6A00]/20">
           STREAM ACTIVE
         </span>
       </div>
 
-      <div className="flex-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/10 space-y-3 relative">
+      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 relative p-4 space-y-3">
         <AnimatePresence>
           {events.map((ev, i) => (
             <motion.div
@@ -148,6 +149,9 @@ export function UnifiedLiveTicker({
           ))}
         </AnimatePresence>
       </div>
+      <button className="w-full p-3 text-center text-[10px] font-heading text-gray-500 tracking-widest uppercase border-t border-white/5 hover:bg-white/5 hover:text-white transition-colors">
+        VIEW FULL INTELLIGENCE LOG
+      </button>
     </div>
   );
 }

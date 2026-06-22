@@ -12,10 +12,10 @@ interface TopActivityEntry {
 }
 
 const TYPE_COLORS: Record<string, string> = {
-  MISSION:    "border-cyan-500/20 bg-cyan-500/5",
-  ENDGAME:    "border-orange-500/20 bg-orange-500/5",
-  OPEN_WORLD: "border-green-500/20 bg-green-500/5",
-  PVP:        "border-red-500/20 bg-red-500/5",
+  MISSION:    "border-t-cyan-500/50",
+  ENDGAME:    "border-t-orange-500/50",
+  OPEN_WORLD: "border-t-green-500/50",
+  PVP:        "border-t-red-500/50",
 };
 
 const TYPE_ACCENT: Record<string, string> = {
@@ -26,61 +26,96 @@ const TYPE_ACCENT: Record<string, string> = {
 };
 
 export function TopActivityBuilds({ entries }: { entries: TopActivityEntry[] }) {
+  // Try to force 5 columns if there are 5 entries, else use auto-fit
+  const colsClass = entries.length === 5 ? "grid-cols-5" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5";
+
   return (
-    <section>
-      <div className="flex items-center gap-3 mb-6">
-        <span className="w-1.5 h-6 rounded-full bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.8)]" />
-        <h2 className="text-sm font-sans font-bold text-gray-300 tracking-widest uppercase">
-          Today's Top Build Per Activity
+    <section className="bg-transparent p-0 border-0 shadow-none">
+      <div className="mb-4">
+        <h2 className="text-xl font-heading font-bold text-white tracking-widest uppercase">
+          Activity Intelligence Matrix
         </h2>
+        <p className="text-[11px] font-sans text-gray-500 uppercase tracking-widest mt-1">
+          Top performing builds by activity and current meta impact
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className={`grid ${colsClass} gap-4`}>
         {entries.map(({ activity, top }) => {
-          const border = TYPE_COLORS[activity.type] ?? "border-white/5 bg-black/20";
+          const border = TYPE_COLORS[activity.type] ?? "border-t-white/20 bg-[#0A0A0A]";
           const accent = TYPE_ACCENT[activity.type] ?? "text-gray-400";
           const slug = activity.name.toLowerCase().replace(/ /g, "-");
+          
+          // Derive a mock confidence out of 5 based on score for visual flair, or default to 3
+          const confScore = top.score ? Math.min(5, Math.max(1, Math.round(top.score / 20))) : 0;
+          const dots = "●".repeat(confScore) + "○".repeat(5 - confScore);
 
           return (
-            <div key={activity.id} className={`glass-card glass-card-hover p-6 relative group ${border}`}>
-              {/* Activity label */}
-              <div className={`text-[10px] font-sans font-bold tracking-widest mb-2 ${accent}`}>
-                {activity.type}
-              </div>
-              <div className="text-sm font-sans font-medium text-gray-300 mb-4 line-clamp-1">
-                {activity.name}
+            <div key={activity.id} className={`bg-[#0A0A0A] border border-white/5 border-t-[3px] rounded-lg p-4 relative group transition-colors hover:border-white/10 ${border}`}>
+              
+              {/* Header */}
+              <div className="mb-4">
+                <div className={`text-[10px] font-heading font-bold tracking-widest uppercase ${accent}`}>
+                  {activity.type.replace("_", " ")}
+                </div>
+                <div className="text-[11px] font-sans text-gray-400 line-clamp-1 uppercase tracking-wider">
+                  {activity.name}
+                </div>
               </div>
 
               {top.status === "AVAILABLE" && top.build && top.score !== undefined ? (
                 <>
-                  {/* Score */}
-                  <div className={`text-4xl font-black font-mono ${accent} mb-1 neon-text`}>
-                    {Math.round(top.score)}
-                  </div>
-                  <div className="text-[10px] text-gray-500 font-sans tracking-wider mb-4">META SCORE</div>
-
-                  {/* Build */}
-                  <Link
-                    href={`/builds/${top.build.id}`}
-                    className="block text-[11px] font-mono text-gray-300 hover:text-white truncate group-hover:underline"
-                  >
-                    {top.build.name}
-                  </Link>
-                  <div className="text-[9px] text-gray-600 font-mono mt-0.5">
-                    {top.build.creators?.name ?? "UNKNOWN"}
+                  {/* Meta Score & Stage */}
+                  <div className="flex items-end justify-between mb-6">
+                    <div>
+                      <div className="text-[10px] font-heading text-gray-500 tracking-widest uppercase mb-1">
+                        Meta Score
+                      </div>
+                      <div className={`text-3xl font-sans font-bold tracking-widest ${accent}`}>
+                        {Math.round(top.score)}
+                      </div>
+                    </div>
+                    <div className={`px-2 py-1 text-[9px] font-heading font-bold uppercase tracking-widest border rounded bg-opacity-10 mb-1 ${accent} border-current`}>
+                      {top.score > 90 ? "DOMINANT" : top.score > 75 ? "ESTABLISHED" : "VOLATILE"}
+                    </div>
                   </div>
 
-                  {/* Link to activity */}
-                  <Link
-                    href={`/activities/${slug}`}
-                    className={`mt-3 text-[9px] font-mono flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity ${accent}`}
-                  >
-                    VIEW LEADERBOARD <ArrowUpRight className="w-2.5 h-2.5" />
-                  </Link>
+                  {/* Signals */}
+                  <div className="space-y-3 pt-4 border-t border-white/5">
+                    <div>
+                      <div className="text-[9px] font-heading text-gray-500 tracking-widest uppercase mb-0.5">
+                        Top Signal
+                      </div>
+                      <Link href={`/builds/${top.build.id}`} className="text-xs font-sans text-white hover:underline line-clamp-1">
+                        {top.build.name}
+                      </Link>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-[9px] font-heading text-gray-500 tracking-widest uppercase mb-0.5">
+                          Analyst
+                        </div>
+                        <div className="text-[11px] font-sans text-gray-300 truncate max-w-[80px]">
+                          {top.build.creators?.name ?? "UNKNOWN"}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-[9px] font-heading text-gray-500 tracking-widest uppercase mb-0.5">
+                          Confidence
+                        </div>
+                        <div className={`text-[11px] font-sans tracking-[0.2em] ${confScore > 3 ? "text-green-500" : "text-yellow-500"}`}>
+                          {dots}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </>
               ) : (
-                <div className="text-xs text-gray-700 font-mono">
-                  {top.status === "INSUFFICIENT_EVIDENCE" ? "INSUFFICIENT EVIDENCE" : "NO DATA"}
+                <div className="py-10 text-center">
+                  <div className="text-[10px] font-heading text-gray-600 tracking-widest uppercase">
+                    {top.status === "INSUFFICIENT_EVIDENCE" ? "INSUFFICIENT DATA" : "NO DATA"}
+                  </div>
                 </div>
               )}
             </div>
