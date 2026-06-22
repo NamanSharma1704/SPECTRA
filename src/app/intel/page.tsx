@@ -20,12 +20,7 @@ export const metadata = {
 };
 
 export default async function IntelPage() {
-  let intel: any;
-  try {
-    intel = await DIPClient.getIntel();
-  } catch {
-    notFound();
-  }
+  const intel = await DIPClient.getIntel();
 
   const {
     generatedAt,
