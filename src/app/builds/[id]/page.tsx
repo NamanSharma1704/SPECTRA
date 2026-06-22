@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft, ArrowUpRight } from "lucide-react";
-import { DIPClient } from "@/client/sdk";
+import { ServerSDK } from "@/server/ServerSDK";
 import { DossierHeader } from "@/components/builds/dossier/DossierHeader";
 import { VerdictPanel } from "@/components/builds/dossier/VerdictPanel";
 import { ActivityRadarChart } from "@/components/builds/dossier/ActivityRadarChart";
@@ -23,7 +23,7 @@ export default async function BuildDossierPage({
 
   let data: any;
   try {
-    data = await DIPClient.getBuild(id);
+    data = await ServerSDK.getBuild(id);
   } catch {
     notFound();
   }

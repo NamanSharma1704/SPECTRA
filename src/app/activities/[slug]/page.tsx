@@ -1,30 +1,23 @@
 import React from "react";
-import { DIPClient } from "@/client/sdk";
+import { ServerSDK } from "@/server/ServerSDK";
 import { ShieldAlert, Target, TrendingUp, ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+
+export const dynamic = "force-dynamic";
 
 export default async function ActivityPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const readableName = slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 
-  const activitiesRes = await DIPClient.getActivities();
+  const activitiesRes = await ServerSDK.getActivities();
   const activity = activitiesRes.data.find((a: any) => a.name.toLowerCase() === readableName.toLowerCase());
 
   if (!activity) {
-    return (
-      <div className="font-mono">
-        <div className="border border-red-800/40 bg-red-950/10 p-8 text-center">
-          <div className="text-red-500 font-bold text-lg mb-2">ACTIVITY NOT FOUND</div>
-          <div className="text-gray-600 text-sm mb-4">&ldquo;{readableName}&rdquo; is not in the SHD network.</div>
-          <Link href="/builds" className="text-primary hover:underline text-sm flex items-center gap-1 justify-center">
-            <ChevronLeft className="w-3 h-3" /> Return to Build Explorer
-          </Link>
-        </div>
-      </div>
-    );
+    notFound();
   }
 
-  const buildsRes = await DIPClient.getActivityBuilds(activity.id);
+  const buildsRes = await ServerSDK.getActivityBuilds(activity.id);
   const builds: any[] = buildsRes.data || [];
 
   return (

@@ -1,4 +1,4 @@
-import { DIPClient } from "@/client/sdk";
+import { CreatorRepository } from "@/server/repositories/CreatorRepository";
 import { CreatorDashboard } from "@/components/creators/CreatorDashboard";
 
 export const dynamic = "force-dynamic";
@@ -13,8 +13,7 @@ export default async function CreatorDirectory() {
   let consensusCount = 0;
   
   try {
-    const res = await DIPClient.getCreators();
-    creators = res.data ?? [];
+    creators = await CreatorRepository.getAllCreators();
 
     const { db } = await import("@/server/db");
     

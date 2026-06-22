@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-import { DIPClient } from "@/client/sdk";
+import { CreatorRepository } from "@/server/repositories/CreatorRepository";
 import { CreatorProfileHeader } from "@/components/creators/CreatorProfileHeader";
 import { CreatorSpecializationChart } from "@/components/creators/CreatorSpecializationChart";
 import { CreatorArchetypesInfluenced } from "@/components/creators/CreatorArchetypesInfluenced";
@@ -22,7 +22,7 @@ export default async function CreatorProfilePage({
 
   let profile: any;
   try {
-    profile = await DIPClient.getCreatorProfile(id);
+    profile = await CreatorRepository.getCreatorById(id);
   } catch {
     notFound();
   }
