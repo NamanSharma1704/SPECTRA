@@ -84,7 +84,7 @@ export function MediaVault({ intelFeeds }: { intelFeeds: any }) {
                 </div>
                 <div className="flex items-center justify-between text-[9px] font-heading text-gray-500 uppercase tracking-widest">
                   <span>{video.creator}</span>
-                  <span>{new Date(video.published_at).toLocaleDateString()}</span>
+                  <span suppressHydrationWarning>{new Date(video.published_at).toLocaleDateString()}</span>
                 </div>
               </div>
             </motion.a>

@@ -66,7 +66,7 @@ export function GlobalKPIRibbon({ stats, generatedAt }: { stats: any; generatedA
             System Status
           </div>
           <div className="text-[11px] font-sans font-bold tracking-widest text-[#FF6A00] uppercase mt-2 flex items-baseline gap-2">
-            SYNCED <span className="text-white/60">{new Date(generatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span>
+            SYNCED <span className="text-white/60" suppressHydrationWarning>{new Date(generatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span>
           </div>
         </div>
         <RefreshCcw className="w-6 h-6 text-[#FF6A00] opacity-40 animate-spin-slow" />
