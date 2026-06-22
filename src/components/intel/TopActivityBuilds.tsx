@@ -66,7 +66,7 @@ export function TopActivityBuilds({ entries }: { entries: TopActivityEntry[] }) 
               {top.status === "AVAILABLE" && top.build && top.score !== undefined ? (
                 <>
                   {/* Meta Score & Stage */}
-                  <div className="flex items-end justify-between mb-6">
+                  <div className="flex flex-wrap items-end justify-between gap-1 mb-6">
                     <div>
                       <div className="text-[10px] font-heading text-gray-500 tracking-widest uppercase mb-1">
                         Meta Score
@@ -75,7 +75,7 @@ export function TopActivityBuilds({ entries }: { entries: TopActivityEntry[] }) 
                         {Math.round(top.score)}
                       </div>
                     </div>
-                    <div className={`px-2 py-1 text-[9px] font-heading font-bold uppercase tracking-widest border rounded bg-opacity-10 mb-1 ${accent} border-current`}>
+                    <div className={`px-1.5 py-0.5 text-[8px] font-heading font-bold uppercase tracking-wider border rounded bg-opacity-10 mb-1 ${accent} border-current shrink-0`}>
                       {top.score > 90 ? "DOMINANT" : top.score > 75 ? "ESTABLISHED" : "VOLATILE"}
                     </div>
                   </div>
