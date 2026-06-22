@@ -12,8 +12,8 @@ import { PatchService } from "@/server/services/PatchService";
 
 export const dynamic = "force-dynamic";
 
-export default async function GearsetMetaPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default async function GearsetMetaPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
 
   const { data: videos, error } = await (db as any)
     .from("creator_videos")

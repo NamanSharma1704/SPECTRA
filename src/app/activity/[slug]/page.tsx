@@ -5,8 +5,8 @@ import { CategorizedVideoFeed } from "@/components/intel/CategorizedVideoFeed";
 
 export const dynamic = "force-dynamic";
 
-export default async function ActivityMetaPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default async function ActivityMetaPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
 
   const { data: videos, error } = await (db as any)
     .from("creator_videos")

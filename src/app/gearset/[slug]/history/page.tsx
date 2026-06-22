@@ -9,8 +9,8 @@ import { BookOpen } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
-export default async function GearsetHistoryPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default async function GearsetHistoryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
 
   // Fetch videos for this gearset
   const { data: videos, error } = await (db as any)

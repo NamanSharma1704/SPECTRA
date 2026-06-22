@@ -12,8 +12,8 @@ import { PatchService } from "@/server/services/PatchService";
 
 export const dynamic = "force-dynamic";
 
-export default async function WeaponMetaPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default async function WeaponMetaPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
 
   // Since we index content_tags as GIN, we can query natively.
   // Using the Supabase JS client with contains for JSONB filtering
