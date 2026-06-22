@@ -84,55 +84,55 @@ export function CreatorIntelligenceCard({ creator, rank }: CreatorIntelligencePr
         </div>
       </div>
 
-      <div className="p-6 flex-1 flex flex-col relative z-10">
+      <div className="p-4 flex-1 flex flex-col relative z-10">
         {/* Creator Info */}
-        <div className="flex justify-between items-start mb-8">
-          <Link href={`/creators/${creator.id}`} className="flex items-center gap-4 group/link">
-            <div className={`w-14 h-14 border ${creator.trustTier === 'ELITE' ? 'border-amber-500/50 bg-amber-900/30 text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.2)]' : 'border-white/10 bg-white/5 text-primary'} flex items-center justify-center font-heading text-3xl font-black transition-colors`}>
+        <div className="flex justify-between items-start mb-5">
+          <Link href={`/creators/${creator.id}`} className="flex items-center gap-3 group/link">
+            <div className={`w-12 h-12 border ${creator.trustTier === 'ELITE' ? 'border-amber-500/50 bg-amber-900/30 text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.2)]' : 'border-white/10 bg-white/5 text-primary'} flex items-center justify-center font-heading text-2xl font-black transition-colors`}>
               {creator.name.charAt(0).toUpperCase()}
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="font-heading font-black tracking-wider text-xl text-white group-hover/link:text-primary transition-colors drop-shadow-md">
+                <span className="font-heading font-black tracking-wider text-lg text-white group-hover/link:text-primary transition-colors drop-shadow-md">
                   {creator.name}
                 </span>
-                {creator.is_verified && <ShieldCheck className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_5px_rgba(34,211,238,0.5)]" />}
+                {creator.is_verified && <ShieldCheck className="w-4 h-4 text-cyan-400 drop-shadow-[0_0_5px_rgba(34,211,238,0.5)]" />}
               </div>
-              <div className="text-[10px] font-sans font-bold text-purple-400 tracking-[0.2em] uppercase border border-purple-500/30 bg-purple-900/20 px-2 py-0.5 inline-block shadow-[0_0_8px_rgba(168,85,247,0.2)]">
+              <div className="text-[9px] font-sans font-bold text-purple-400 tracking-[0.1em] uppercase border border-purple-500/30 bg-purple-900/20 px-2 py-0.5 inline-block shadow-[0_0_8px_rgba(168,85,247,0.2)]">
                 {archetype}
               </div>
             </div>
           </Link>
           <div className="text-right">
-            <div className="text-[10px] text-gray-500 font-sans font-bold tracking-[0.2em] uppercase mb-1">RANK</div>
-            <div className="text-3xl font-black font-heading text-primary neon-text opacity-70 group-hover:opacity-100 transition-opacity">#{rank}</div>
+            <div className="text-[9px] text-gray-500 font-sans font-bold tracking-[0.2em] uppercase mb-0.5">RANK</div>
+            <div className="text-2xl font-black font-heading text-primary neon-text opacity-70 group-hover:opacity-100 transition-opacity">#{rank}</div>
           </div>
         </div>
 
         {/* Core Metrics Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div className="bg-black/40 border border-white/5 p-3">
-            <div className="text-[9px] font-sans font-bold text-gray-500 tracking-widest uppercase mb-2 truncate">Meta Score</div>
-            <div className="font-heading font-black text-xl text-white flex items-center gap-2">
-              <Activity className="w-4 h-4 text-purple-400" /> {creator.peakMetaScore}
+        <div className="grid grid-cols-4 gap-2 mb-4">
+          <div className="bg-black/40 border border-white/5 p-2 flex flex-col justify-center">
+            <div className="text-[8px] font-sans font-bold text-gray-500 tracking-wider uppercase mb-1">Meta Score</div>
+            <div className="font-heading font-black text-lg text-white flex items-center gap-1.5">
+              <Activity className="w-3 h-3 text-purple-400" /> {creator.peakMetaScore}
             </div>
           </div>
-          <div className="bg-black/40 border border-white/5 p-3">
-            <div className="text-[9px] font-sans font-bold text-gray-500 tracking-widest uppercase mb-2 truncate">Accuracy</div>
-            <div className="font-heading font-black text-xl text-white flex items-center gap-2">
-              <Target className="w-4 h-4 text-cyan-400" /> {creator.accuracyState?.status === "AVAILABLE" ? `${creator.accuracyState.accuracy}%` : "N/A"}
+          <div className="bg-black/40 border border-white/5 p-2 flex flex-col justify-center">
+            <div className="text-[8px] font-sans font-bold text-gray-500 tracking-wider uppercase mb-1">Accuracy</div>
+            <div className="font-heading font-black text-lg text-white flex items-center gap-1.5">
+              <Target className="w-3 h-3 text-cyan-400" /> {creator.accuracyState?.status === "AVAILABLE" ? `${creator.accuracyState.accuracy}%` : "N/A"}
             </div>
           </div>
-          <div className="bg-black/40 border border-white/5 p-3">
-            <div className="text-[9px] font-sans font-bold text-gray-500 tracking-widest uppercase mb-2 truncate">Lead Time</div>
-            <div className="font-heading font-black text-xl text-white flex items-center gap-2">
-              <Activity className="w-4 h-4 text-emerald-400" /> {creator.leadTimeState?.status === "AVAILABLE" ? `${creator.leadTimeState.leadTime}d` : "N/A"}
+          <div className="bg-black/40 border border-white/5 p-2 flex flex-col justify-center">
+            <div className="text-[8px] font-sans font-bold text-gray-500 tracking-wider uppercase mb-1">Lead Time</div>
+            <div className="font-heading font-black text-lg text-white flex items-center gap-1.5">
+              <Activity className="w-3 h-3 text-emerald-400" /> {creator.leadTimeState?.status === "AVAILABLE" ? `${creator.leadTimeState.leadTime}d` : "N/A"}
             </div>
           </div>
-          <div className="bg-black/40 border border-white/5 p-3">
-            <div className="text-[9px] font-sans font-bold text-gray-500 tracking-widest uppercase mb-2 truncate">Predictions</div>
-            <div className="font-heading font-black text-xl text-white flex items-center gap-2">
-              <BrainCircuit className="w-4 h-4 text-orange-400" /> {creator.successfulCalls}
+          <div className="bg-black/40 border border-white/5 p-2 flex flex-col justify-center">
+            <div className="text-[8px] font-sans font-bold text-gray-500 tracking-wider uppercase mb-1">Predict.</div>
+            <div className="font-heading font-black text-lg text-white flex items-center gap-1.5">
+              <BrainCircuit className="w-3 h-3 text-orange-400" /> {creator.successfulCalls}
             </div>
           </div>
         </div>
@@ -140,7 +140,7 @@ export function CreatorIntelligenceCard({ creator, rank }: CreatorIntelligencePr
         {/* Explainability Toggle */}
         <button 
           onClick={() => setExpanded(!expanded)}
-          className="mt-auto w-full flex items-center justify-center gap-2 text-[10px] font-sans font-bold text-primary/60 hover:text-primary uppercase tracking-[0.2em] py-3 border-t border-white/10 transition-colors bg-black/20 hover:bg-black/40"
+          className="mt-auto w-full flex items-center justify-center gap-2 text-[9px] font-sans font-bold text-primary/60 hover:text-primary uppercase tracking-[0.2em] py-2 border-t border-white/10 transition-colors bg-black/20 hover:bg-black/40"
         >
           {expanded ? 'Hide Analysis' : 'Why This Rank?'}
           {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}

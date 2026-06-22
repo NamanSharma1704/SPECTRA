@@ -81,37 +81,37 @@ export function CreatorDashboard({ initialCreators, consensusCount }: { initialC
           </div>
 
           <div className="flex flex-col items-end gap-2">
-            <div className="text-[10px] text-primary/50 font-sans tracking-[0.2em] font-bold uppercase">Sort By</div>
-            <div className="flex items-center glass-panel p-1">
+            <div className="text-[10px] text-primary/50 font-sans tracking-[0.2em] font-bold uppercase mr-2">Sort By</div>
+            <div className="flex items-center border border-white/10 bg-black/40 p-1 rounded-md shadow-sm">
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => setSortBy("trust")}
-                className={`px-3 py-1.5 text-[10px] font-sans font-bold tracking-[0.1em] uppercase transition-colors ${sortBy === "trust" ? "bg-amber-900/40 text-amber-400 border border-amber-500/50 shadow-[0_0_10px_rgba(245,158,11,0.2)]" : "text-gray-500 hover:text-amber-400 border border-transparent"}`}
+                className={`px-3 py-1.5 text-[9px] font-sans font-bold tracking-[0.1em] uppercase transition-colors rounded ${sortBy === "trust" ? "bg-amber-900/40 text-amber-400 border border-amber-500/50 shadow-[0_0_10px_rgba(245,158,11,0.2)]" : "text-gray-500 hover:text-amber-400 border border-transparent"}`}
               >
                 Trust Score
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => setSortBy("meta")}
-                className={`px-3 py-1.5 text-[10px] font-sans font-bold tracking-[0.1em] uppercase transition-colors ${sortBy === "meta" ? "bg-purple-900/40 text-purple-400 border border-purple-500/50 shadow-[0_0_10px_rgba(168,85,247,0.2)]" : "text-gray-500 hover:text-purple-400 border border-transparent"}`}
+                className={`px-3 py-1.5 text-[9px] font-sans font-bold tracking-[0.1em] uppercase transition-colors rounded ${sortBy === "meta" ? "bg-purple-900/40 text-purple-400 border border-purple-500/50 shadow-[0_0_10px_rgba(168,85,247,0.2)]" : "text-gray-500 hover:text-purple-400 border border-transparent"}`}
               >
                 Meta Score
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => setSortBy("accuracy")}
-                className={`px-3 py-1.5 text-[10px] font-sans font-bold tracking-[0.1em] uppercase transition-colors ${sortBy === "accuracy" ? "bg-cyan-900/40 text-cyan-400 border border-cyan-500/50 shadow-[0_0_10px_rgba(34,211,238,0.2)]" : "text-gray-500 hover:text-cyan-400 border border-transparent"}`}
+                className={`px-3 py-1.5 text-[9px] font-sans font-bold tracking-[0.1em] uppercase transition-colors rounded ${sortBy === "accuracy" ? "bg-cyan-900/40 text-cyan-400 border border-cyan-500/50 shadow-[0_0_10px_rgba(34,211,238,0.2)]" : "text-gray-500 hover:text-cyan-400 border border-transparent"}`}
               >
                 Accuracy
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => setSortBy("lead")}
-                className={`px-3 py-1.5 text-[10px] font-sans font-bold tracking-[0.1em] uppercase transition-colors ${sortBy === "lead" ? "bg-emerald-900/40 text-emerald-400 border border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.2)]" : "text-gray-500 hover:text-emerald-400 border border-transparent"}`}
+                className={`px-3 py-1.5 text-[9px] font-sans font-bold tracking-[0.1em] uppercase transition-colors rounded ${sortBy === "lead" ? "bg-emerald-900/40 text-emerald-400 border border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.2)]" : "text-gray-500 hover:text-emerald-400 border border-transparent"}`}
               >
                 Lead Time
               </motion.button>
