@@ -20,7 +20,23 @@ export const metadata = {
 };
 
 export default async function IntelPage() {
-  const intel = await DIPClient.getIntel();
+  let intel: any;
+  let errorMsg = null;
+  try {
+    intel = await DIPClient.getIntel();
+  } catch (err: any) {
+    errorMsg = err.message || err.toString();
+  }
+
+  if (errorMsg || !intel) {
+    return (
+      <div className="p-10 text-red-500 font-mono">
+        <h1>INTEL DASHBOARD CRASHED</h1>
+        <p>Error: {errorMsg}</p>
+        <p>Base URL used by SDK: {process.env.VERCEL_URL}</p>
+      </div>
+    );
+  }
 
   const {
     generatedAt,
